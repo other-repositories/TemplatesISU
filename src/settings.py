@@ -1,15 +1,13 @@
-        
-"""
-Настройки
-"""
+from  src.errors.error_utils import error_proxy, operation_exception, argument_exception
+
 class settings:
     def __init__(self):
-        self.inn = "123123123123"
-        self.account_number = "12312312312"
-        self.correspondent_account = "12312312312"
-        self.bik = "123123123"
+        self.inn = "0" * 12
+        self.account_number = "0" * 11
+        self.correspondent_account = "0" * 11
+        self.bik = "0" * 9
         self.organization_name = ""
-        self.ownership_type = "12312"
+        self.ownership_type = "0" * 5
 
     @property
     def inn(self):
@@ -18,7 +16,7 @@ class settings:
     @inn.setter
     def inn(self, value):
         if len(value) != 12:
-            raise ValueError("ИНН должен содержать ровно 12 символов.")
+            raise argument_exception("ИНН должен содержать ровно 12 символов.")
         self._inn = value
 
     @property
@@ -28,7 +26,7 @@ class settings:
     @account_number.setter
     def account_number(self, value):
         if len(value) != 11:
-            raise ValueError("Счет должен содержать ровно 11 символов.")
+            raise argument_exception("Счет должен содержать ровно 11 символов.")
         self._account_number = value
 
     @property
@@ -38,7 +36,7 @@ class settings:
     @correspondent_account.setter
     def correspondent_account(self, value):
         if len(value) != 11:
-            raise ValueError("Корреспондентский счет должен содержать ровно 11 символов.")
+            raise argument_exception("Корреспондентский счет должен содержать ровно 11 символов.")
         self._correspondent_account = value
 
     @property
@@ -48,7 +46,7 @@ class settings:
     @bik.setter
     def bik(self, value):
         if len(value) != 9:
-            raise ValueError("БИК должен содержать ровно 9 символов.")
+            raise argument_exception("БИК должен содержать ровно 9 символов.")
         self._bik = value
 
     @property
@@ -66,6 +64,6 @@ class settings:
     @ownership_type.setter
     def ownership_type(self, value):
         if len(value) != 5:
-            raise ValueError("Вид собственности должен содержать ровно 5 символов.")
+            raise argument_exception("Вид собственности должен содержать ровно 5 символов.")
         self._ownership_type = value
 
