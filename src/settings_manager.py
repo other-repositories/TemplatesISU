@@ -1,5 +1,5 @@
-from src.abstract_logic import abstract_logic
-from src.settings import settings
+from  src.abstract_logic import abstract_logic
+from  src.settings import settings
 
 import json
 import os

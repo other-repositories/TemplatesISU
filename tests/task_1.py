@@ -1,5 +1,5 @@
 import pytest
-from src.settings_manager import settings_manager
+from  src.settings_manager import settings_manager
 from unittest.mock import patch, mock_open
 import json
 
