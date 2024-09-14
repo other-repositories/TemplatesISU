@@ -31,8 +31,8 @@ class error_proxy(Exception):
         super().__init__(*args)
         self.__error.set_error(self)
 
-    @staticmethod
     # Validate information
+    @staticmethod
     def check( value, type_, len_= None):
         if value is None:
             raise argument_exception(f"Empty arg")

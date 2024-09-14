@@ -12,12 +12,12 @@ class company_model(abstract_reference):
             self.bill = bill
 
     @property
-    def inn(self):
+    def inn(self): 
         return self._inn
 
     @inn.setter
     def inn(self, value):
-        if len(value) != 12:
+        if len(value) != 12: #todo check with fixed
             raise argument_exception("ИНН должен содержать ровно 12 символов.")
         self._inn = value
 
@@ -27,7 +27,7 @@ class company_model(abstract_reference):
 
     @bik.setter
     def bik(self, value):
-        if len(value) != 9:
+        if len(value) != 9: #todo check with fixed
             raise argument_exception("БИК должен содержать ровно 9 символов.")
         self._bik = value
 
@@ -45,6 +45,6 @@ class company_model(abstract_reference):
 
     @ownership_type.setter
     def ownership_type(self, value):
-        if len(value) != 5:
+        if len(value) != 5: #todo check with fixed
             raise argument_exception("Вид собственности должен содержать ровно 5 символов.")
         self._ownership_type = value
