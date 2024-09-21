@@ -85,23 +85,17 @@ class start_service:
 
 
     def create(self, receipt_dict) -> bool:    
-        items = []
         nomenclatures = start_service.create_nomenclatures()
-
-        items.append(nomenclatures)
-
         name = receipt_dict["title"]
         ingredients = [(ingredient["name"], int(ingredient["amount"].split()[0])) for ingredient in receipt_dict["ingredients"] if "amount" in ingredient]
         instructions = receipt_dict["instructions"]
         extra = f"Время приготовления: {receipt_dict['cooking_time']}"
         
         item = start_service.create_receipt(name,ingredients, extra, instructions, nomenclatures)
-        items.append(item)
-
         self.__storage.add_recipe(item)
 
-        items.append(start_service.create_units())
-        items.append(start_service.create_groups())
+        start_service.create_units()
+        start_service.create_groups()
 
-        return items
+        return True
              
