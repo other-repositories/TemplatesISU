@@ -62,17 +62,13 @@ class settings_manager(abstract_logic):
             stream = open(full_name)
             data = json.load(stream)
 
-
-            # Список полей от типа назначения    
             fields = list(filter(lambda x: not x.startswith("_"), dir(self.__settings.__class__)))
 
-            # Заполняем свойства 
             for field in fields:
                 keys = list(filter(lambda x: x == field, data.keys()))
                 if len(keys) != 0:
                     value = data[field]
 
-                    # Если обычное свойство - заполняем.
                     if not isinstance(value, list) and not isinstance(value, dict):
                         setattr(self.__settings, field, value)
 
@@ -86,16 +82,11 @@ class settings_manager(abstract_logic):
         self.open_from_dict(dict_value)
         return self.__settings
     
-    """
-    Загруженные настройки
-    """
+
     @property
     def current_settings(self) -> settings:
         return self.__settings
     
-    """
-    Набор настроек по умолчанию
-    """
     def __default_setting(self) -> settings:
         _settings = settings()
         _settings.inn = "380080920202"

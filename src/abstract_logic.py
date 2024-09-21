@@ -1,9 +1,5 @@
 from abc import ABC, abstractmethod
 
-
-"""
-Абстрактный класс для обработки логики
-"""
 class abstract_logic(ABC):
     __error_text:str = ""
 
@@ -23,9 +19,6 @@ class abstract_logic(ABC):
     def _inner_set_exception(self, ex: Exception):
         self.__error_text = f"Ошибка! Исключение {ex}"
 
-    """
-    Абстрактный метод для загрузки и обработки исключений
-    """
     @abstractmethod
     def set_exception(self, ex: Exception):
         pass

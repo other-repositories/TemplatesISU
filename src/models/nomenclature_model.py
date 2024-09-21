@@ -1,7 +1,7 @@
 from  src.abstract_reference import abstract_reference
-from  src.errors.error_utils import error_proxy, operation_exception
 from  src.models.range_model import range_model
 from  src.models.nom_group_model import nom_group_model
+from  src.errors.error_utils import error_proxy, argument_exception, operation_exception
 
 class nomenclature_model(abstract_reference):
     _nom_group = None
@@ -43,3 +43,14 @@ class nomenclature_model(abstract_reference):
     def full_name(self, value: str):
         error_proxy.check(value.strip(), str, 255)
         self._full_name = value
+
+    @staticmethod
+    def get(nomenclature_name: str, nomenclatures: dict):
+        error_proxy.check(nomenclature_name, str)
+        
+        keys = list(filter(lambda x: x == nomenclature_name, nomenclatures.keys() ))
+
+        if len(keys) == 0:
+            raise operation_exception(f"Inncorect list {nomenclature_name}!")
+                
+        return nomenclatures[keys[0]]
