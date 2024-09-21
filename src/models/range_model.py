@@ -49,3 +49,7 @@ class range_model(abstract_reference):
         base = range_model.create_gram()
         item = range_model("киллограмм", base, 1000)
         return item
+
+    @staticmethod
+    def create_ting():
+        return range_model("штука")
