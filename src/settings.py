@@ -1,6 +1,9 @@
 from  src.errors.error_utils import error_proxy, operation_exception, argument_exception
 
 class settings:
+
+    _mode = "csv"
+
     def __init__(self):
         self.inn = "0" * 12
         self.account_number = "0" * 11
@@ -67,3 +70,12 @@ class settings:
             raise argument_exception("Вид собственности должен содержать ровно 5 символов.")
         self._ownership_type = value
 
+    @property
+    def report_mode(self):
+        return self._mode
+    
+    @report_mode.setter
+    def report_mode(self, value: str):
+        error_proxy.check(value, str)
+        
+        self._mode = value

@@ -69,6 +69,9 @@ class start_service:
         items.append( nom_group_model.create_group())
         return items         
     
+    def get_storage(self):
+        return self.__storage
+
     @staticmethod
     def create_receipt(name, items, extra, full_desc, _data_nom: list = None) -> list:    
         if _data_nom is None:

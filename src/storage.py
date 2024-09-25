@@ -8,6 +8,9 @@ class storage_repository:
     def add_recipe(self, recipe):
         self.recipes.append(recipe)
 
+    def get_data(self):
+        return {"recipes" : self.recipes} # todo other models
+
     def dump(self):
         if not self.recipes:
             print("Нет сохраненных рецептов.")
