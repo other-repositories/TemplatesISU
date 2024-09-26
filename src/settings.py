@@ -1,4 +1,12 @@
 from  src.errors.error_utils import error_proxy, operation_exception, argument_exception
+from enum import Enum
+
+class ConvertTypes(Enum):
+    XML = "xml",
+    CSV = "csv",
+    JSON = "json",
+    RTF = "rtf",
+    MD = "markdown"
 
 class settings:
 

@@ -30,8 +30,10 @@ class csv_report(abstract_report):
                     value = getattr(item, field)
                     if isinstance(value, (list, dict)) or value is None:
                         value = ""
-                        
-                    row +=f"{value}{delimetr}"
+                    if hasattr(value, 'name'): 
+                        row +=f"{value.name}{delimetr}"
+                    else:
+                        row +=f"{value}{delimetr}"
                 
             result += f"{row[:-1]}\n"
             

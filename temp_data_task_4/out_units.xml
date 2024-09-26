@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<units>
+<item>
+<base_range></base_range>
+<coefficient>1</coefficient>
+<name>грамм</name>
+<unique_code>cb7ed6f8-a05a-4525-bbdb-245702202379</unique_code>
+</item>
+<item>
+<base_range>грамм</base_range>
+<coefficient>1000</coefficient>
+<name>киллограмм</name>
+<unique_code>cb7ed6f8-a05a-4525-bbdb-245702202379</unique_code>
+</item>
+<item>
+<base_range></base_range>
+<coefficient>1</coefficient>
+<name>штука</name>
+<unique_code>cb7ed6f8-a05a-4525-bbdb-245702202379</unique_code>
+</item>
+</units>

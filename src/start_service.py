@@ -96,9 +96,9 @@ class start_service:
         
         item = start_service.create_receipt(name,ingredients, extra, instructions, nomenclatures)
         self.__storage.add_recipe(item)
-
-        start_service.create_units()
-        start_service.create_groups()
+        self.__storage.add_items("nomenclatures",nomenclatures)
+        self.__storage.add_items("units",start_service.create_units())
+        self.__storage.add_items("groups",start_service.create_groups())
 
         return True
              

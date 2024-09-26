@@ -10,11 +10,11 @@ class markdown_report(abstract_report):
         # Исходные данные
         items = self.data[ storage_key ]
         if items == None:
-            raise operation_exception("Невозможно сформировать данные. Данные не заполнены!")
+            raise operation_exception("Error data")
         
         
         if len(items) == 0:
-            raise operation_exception("Невозможно сформировать данные. Нет данных!")
+            raise operation_exception("Data Empty")
         
         # Заголовок
         result.append(f"# {storage_key}")
@@ -38,8 +38,10 @@ class markdown_report(abstract_report):
                     value = getattr(item, field)
                     if isinstance(value, (list, dict)) or value is None:
                         value = ""
-                        
-                    row +=f"|{value}"  
+                    if hasattr(value, 'name'): 
+                        row +=f"|{value.name}"
+                    else:
+                        row +=f"|{value}"     
                 
             result.append(f"{row}|")
             

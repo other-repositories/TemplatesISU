@@ -34,9 +34,7 @@ class xml_report(abstract_report):
                 value = getattr(item, field)
                 if isinstance(value, (list, dict)) or value is None:
                     value = ""
-                    
-                result.append(f"<{field}>{value}</{field}>")
-                
+                result.append(f"<{field}>{(value.name if hasattr(value, 'name') else value)}</{field}>")        
         result.append("</item>")
         
         return "\n".join(result)
