@@ -32,8 +32,6 @@ class report_factory:
         #if format not in self.__maps.keys():
         #    raise operation_exception(f"No impl") 
         # Получаем тип связанный с форматом
-        print(self.__settings.get_convert_types())
-        print(self.__settings.get_convert_types())
         report_type = self.__settings.get_convert_types()[format]
         # Получаем объект 
         result = report_type(data)

@@ -83,9 +83,8 @@ class start_service:
             raise argument_exception("List empty")        
         
         item = receipt_model.create_receipt(name, extra, items, data)
-        item.full_desc.extend(full_desc)
+        item.full_desc = full_desc
         return item
-
 
     def create(self, receipt_dict) -> bool:    
         nomenclatures = start_service.create_nomenclatures()

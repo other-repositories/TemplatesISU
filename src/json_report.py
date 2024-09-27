@@ -1,79 +1,91 @@
 from src.abstract_report import abstract_report
 from src.errors.error_utils import error_proxy, operation_exception, argument_exception
 from src.abstract_reference import abstract_reference
+from src.models.receipt_model import receipt_model
 
 import json
+import uuid
 
-#
-# Формирование отчета в формате json
-#
 class json_report(abstract_report):
-    
-    def create(self, storage_key: str):
-        super().create(storage_key)
-        
-         # Исходные данные
-        items = self.data[ storage_key ]
-        if items == None:
-            raise operation_exception("Невозможно сформировать данные. Данные не заполнены!")
-        
-        if len(items) == 0:
-            raise operation_exception("Невозможно сформировать данные. Нет данных!")
-        
 
-        # Сконвертируем данные как список
-        result = self.__serialize_list("data", object)
+    _maps = {}
+    def uuid_convertor(self, field, object: uuid.UUID):
+        return {field:object.hex}
+    def basic_convertor(self, field: str, object):
+        return { field: object }
+    def reference_convertor(self,field: str, object):
+        factory = json_report({"temp": object})
+        return factory.create("temp")
+
+    def __init__(self, data = None) -> None:
+        super().__init__(data)
+        self._maps[int] = self.basic_convertor
+        self._maps[float] = self.basic_convertor
+        self._maps[str] = self.basic_convertor
+        self._maps[bool] = self.basic_convertor
+        self._maps[uuid.UUID] = self.uuid_convertor
+        for  inheritor in abstract_reference.__subclasses__():
+            self._maps[inheritor] = self.reference_convertor
+
+    def create(self, storage_key: str):
+        
+        items = self.data[ storage_key ]
+
+        result = self.__serialize_list("data", items)
         if result is not None:
             return result
         
-        # Сконвертируем данные как значение
         data = {}
-        fields = abstract_reference.create_fields(object)
-        
+        fields = abstract_reference.create_fields(items)
+
         for field in fields:
-            attribute = getattr(object.__class__, field)
+            attribute = getattr(items.__class__, field)
             if isinstance(attribute, property):
-                value = getattr(object, field)
-                
-                # Сконвертируем данные как список
+                value = getattr(items, field)
                 dictionary =  self.__serialize_list(field, value)
                 if dictionary is None:
-                    # Сконвертируем данные как значение
                     dictionary = self.__serialize_item(field, value)
-                    
-                try:    
                     if len(dictionary) == 1:
-                        # Обычное поле
                         data[field] =  dictionary[field]
                     else:
-                        # Вложенный словарь
-                        data[field] = dictionary    
-                except:
-                    raise operation_exception(f"Невозможно сериализовать объект в набор словарей. Поле {field}, значение: {dictionary}")            
-        
-        # Формируем Json
+                        data[field] = dictionary       
+                else: 
+                    data[field] = dictionary
+
         result = json.dumps(data, sort_keys = True, indent = 4, ensure_ascii = False)  
         return result
       
     def __serialize_list(self, field: str,  source) -> list:
-        """
-            Сконвертировать список
-        Args:
-            source (_type_): _description_
-
-        Returns:
-            dict: _description_
-        """
         error_proxy.check(field, str)
-        
-        # Сконвертировать список
         if isinstance(source, list):
             result = []
             for item in source:
                 result.append( self.__serialize_item( field,  item ))  
-            
-            return result 
-                
+
+            return result
+        
+        if isinstance(source, dict):
+            result = []
+            for key,  value in source.items():
+                result.append( self.__serialize_item( key, value  ))  
+            return result
+        
+    def __serialize_item(self, field: str,  source):
+
+        error_proxy.check(field, str)
+        if source is None:
+            return {field: None}
+ 
+        if isinstance(source, (list, dict)):
+            return self.__serialize_list(field, source)
+        
+        if type(source) not in self._maps.keys():
+            raise operation_exception(f"Не возможно подобрать конвертор для типа {type(source)}")
+
+        convertor = self._maps[ type(source)]
+        dictionary = convertor( field, source )
+        
+        return  dictionary            
         
         
         
