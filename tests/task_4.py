@@ -11,11 +11,9 @@ def test_check_report_factory_create_json():
     with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
         start.create(json.load(file))
 
-    factory = report_factory()
-    manager.current_settings.report_mode = "json"
+    factory = report_factory(manager.current_settings)
     
-    report = factory.create(manager.current_settings.report_mode, 
-                            start.get_storage().get_data())
+    report = factory.create("json", start.get_storage().get_data())
     
     assert report is not None
     print ( report.create("recipes") )
@@ -30,11 +28,9 @@ def test_check_report_factory_create_csv():
     with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
         start.create(json.load(file))
 
-    factory = report_factory()
-    manager.current_settings.report_mode = "csv"
+    factory = report_factory( manager.current_settings )
     
-    report = factory.create(manager.current_settings.report_mode, 
-                            start.get_storage().get_data())
+    report = factory.create("csv", start.get_storage().get_data())
     
     assert report is not None
     print ( report.create("recipes") )
@@ -48,14 +44,10 @@ def test_check_report_factory_create_markdown():
     with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
         start.create(json.load(file))
 
-    factory = report_factory()
-    manager.current_settings.report_mode = "markdown"
-    
+    factory = report_factory(manager.current_settings)
 
-    report = factory.create(manager.current_settings.report_mode, 
-                            start.get_storage().get_data())
+    report = factory.create("markdown", start.get_storage().get_data())
     
-
     assert report is not None
     print ( report.create("recipes") )
     assert False
@@ -68,12 +60,9 @@ def test_check_report_factory_create_xml():
     with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
         start.create(json.load(file))
 
-    factory = report_factory()
-    manager.current_settings.report_mode = "xml"
-    
+    factory = report_factory(manager.current_settings)
 
-    report = factory.create(manager.current_settings.report_mode, 
-                            start.get_storage().get_data())
+    report = factory.create("xml", start.get_storage().get_data())
 
     assert report is not None
     print ( report.create("recipes") )
@@ -87,12 +76,9 @@ def test_check_report_factory_create_rtf():
     with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
         start.create(json.load(file))
 
-    factory = report_factory()
-    manager.current_settings.report_mode = "rtf"
-    
+    factory = report_factory(manager.current_settings)
     # Действие
-    report = factory.create(manager.current_settings.report_mode, 
-                            start.get_storage().get_data())
+    report = factory.create("rtf", start.get_storage().get_data())
     
     # Проверки
     assert report is not None
@@ -107,12 +93,9 @@ def test_check_report_factory_create_csv_nom():
     with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
         start.create(json.load(file))
 
-    factory = report_factory()
-    manager.current_settings.report_mode = "csv"
-    
+    factory = report_factory(manager.current_settings)
     # Действие
-    report = factory.create(manager.current_settings.report_mode, 
-                            start.get_storage().get_data())
+    report = factory.create("csv", start.get_storage().get_data())
     
     # Проверки
     assert report is not None
@@ -126,12 +109,9 @@ def test_check_report_factory_create_xml_units():
     with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
         start.create(json.load(file))
 
-    factory = report_factory()
-    manager.current_settings.report_mode = "xml"
-    
+    factory = report_factory(manager.current_settings)
     # Действие
-    report = factory.create(manager.current_settings.report_mode, 
-                            start.get_storage().get_data())
+    report = factory.create("xml", start.get_storage().get_data())
 
     # Проверки
     assert report is not None
@@ -146,7 +126,7 @@ def test_check_report_factory_create_markdown_groups():
     with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
         start.create(json.load(file))
 
-    factory = report_factory(manager.current_settings.report_mode)
+    factory = report_factory(manager.current_settings)
     
     # Действие
     report = factory.create(None, start.get_storage().get_data())
@@ -155,3 +135,33 @@ def test_check_report_factory_create_markdown_groups():
     assert report is not None
     print ( report.create("groups") )
     assert False 
+
+def common_test(format, type):
+    manager = settings_manager()
+    manager.current_settings.report_mode = format
+    start = start_service( manager.current_settings )
+
+    with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
+        start.create(json.load(file))
+
+    factory = report_factory(manager.current_settings)
+    
+    # Действие
+    report = factory.create(None, start.get_storage().get_data())
+
+    # Проверки
+    assert report is not None
+    print ( report.create(type) )
+    assert False 
+
+def test_check_report_factory_create_nomenclatures_json():
+    common_test("json","nomenclatures")
+
+def test_check_report_factory_create_recipes_json():
+    common_test("json","recipes")
+
+def test_check_report_factory_create_nomenclatures_XML():
+    common_test("xml","nomenclatures")
+
+def test_check_report_factory_create_recipes_XML():
+    common_test("xml","recipes")

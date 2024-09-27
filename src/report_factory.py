@@ -5,29 +5,23 @@ from src.json_report import json_report
 from src.xml_report import xml_report
 from src.rtf_report import rtf_report
 from src.errors.error_utils import error_proxy, operation_exception, argument_exception
-from src.settings import ConvertTypes
+from src.settings import ConvertTypes, settings
 #
 # Фабрика для отчетов
 #
 class report_factory:
     __maps = {}
     __format_default = "csv"
+    __settings: settings = None
 
-    def __init__(self, format = None) -> None:
-       self.__build_structure()
-       if format is not None:
-            self.__format_default = format
-
-    def __build_structure(self):
-        self.__maps[ConvertTypes.CSV.value]  = csv_report
-        self.__maps[ConvertTypes.MD.value] = markdown_report
-        self.__maps[ConvertTypes.JSON.value] = json_report #xml alternative
-        self.__maps[ConvertTypes.XML.value] = xml_report
-        self.__maps[ConvertTypes.RTF.value] = rtf_report
+    def __init__(self, sett: settings) -> None:
+       self.__settings = sett
       
     def create(self, format = None, data: str = None) -> abstract_report:
         if format is None: 
-            format = self.__format_default
+            if self.__settings is None:
+               raise argument_exception("format or report_mode in settings must be not None")
+            format = self.__settings.report_mode
 
         error_proxy.check(format, str)
         error_proxy.check(data, dict)
@@ -35,12 +29,12 @@ class report_factory:
         if len(data) == 0:
             raise argument_exception("Empty data")
        
-        if format not in self.__maps.keys():
-            raise operation_exception(f"No impl") 
-        
-        print(data)
+        #if format not in self.__maps.keys():
+        #    raise operation_exception(f"No impl") 
         # Получаем тип связанный с форматом
-        report_type = self.__maps[format]
+        print(self.__settings.get_convert_types())
+        print(self.__settings.get_convert_types())
+        report_type = self.__settings.get_convert_types()[format]
         # Получаем объект 
         result = report_type(data)
         
