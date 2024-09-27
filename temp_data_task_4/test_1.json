@@ -1,0 +1,157 @@
+[{
+    "full_name": "",
+    "name": "Пшеничная мука",
+    "nom_group": {
+        "name": "Ингредиенты",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "range": {
+        "base_range": {
+            "base_range": null,
+            "coefficient": 1,
+            "name": "грамм",
+            "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+        },
+        "coefficient": 1000,
+        "name": "киллограмм",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+},{
+    "full_name": "",
+    "name": "Сахар",
+    "nom_group": {
+        "name": "Ингредиенты",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "range": {
+        "base_range": {
+            "base_range": null,
+            "coefficient": 1,
+            "name": "грамм",
+            "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+        },
+        "coefficient": 1000,
+        "name": "киллограмм",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+},{
+    "full_name": "",
+    "name": "Сливочное масло",
+    "nom_group": {
+        "name": "Ингредиенты",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "range": {
+        "base_range": {
+            "base_range": null,
+            "coefficient": 1,
+            "name": "грамм",
+            "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+        },
+        "coefficient": 1000,
+        "name": "киллограмм",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+},{
+    "full_name": "",
+    "name": "Яйца",
+    "nom_group": {
+        "name": "Ингредиенты",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "range": {
+        "base_range": null,
+        "coefficient": 1,
+        "name": "штука",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+},{
+    "full_name": "",
+    "name": "Ванилин",
+    "nom_group": {
+        "name": "Ингредиенты",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "range": {
+        "base_range": null,
+        "coefficient": 1,
+        "name": "грамм",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+},{
+    "full_name": "",
+    "name": "Куринное филе",
+    "nom_group": {
+        "name": "Ингредиенты",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "range": {
+        "base_range": {
+            "base_range": null,
+            "coefficient": 1,
+            "name": "грамм",
+            "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+        },
+        "coefficient": 1000,
+        "name": "киллограмм",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+},{
+    "full_name": "",
+    "name": "Салат Романо",
+    "nom_group": {
+        "name": "Ингредиенты",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "range": {
+        "base_range": null,
+        "coefficient": 1,
+        "name": "грамм",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+},{
+    "full_name": "",
+    "name": "Сыр Пармезан",
+    "nom_group": {
+        "name": "Ингредиенты",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "range": {
+        "base_range": {
+            "base_range": null,
+            "coefficient": 1,
+            "name": "грамм",
+            "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+        },
+        "coefficient": 1000,
+        "name": "киллограмм",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+},{
+    "full_name": "",
+    "name": "Чеснок",
+    "nom_group": {
+        "name": "Ингредиенты",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "range": {
+        "base_range": {
+            "base_range": null,
+            "coefficient": 1,
+            "name": "грамм",
+            "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+        },
+        "coefficient": 1000,
+        "name": "киллограмм",
+        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+    },
+    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+},]

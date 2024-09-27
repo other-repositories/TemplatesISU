@@ -1,0 +1,153 @@
+[{
+    "extra_info": "Время приготовления: 20 мин",
+    "full_desc": "Как испечь вафли хрустящие в вафельнице? Подготовьте необходимые продукты. Из данного количества у меня получилось 8 штук диаметром около 10 см.Масло положите в сотейник с толстым дном. Растопите его на маленьком огне на плите, на водяной бане либо в микроволновке.Добавьте в теплое масло сахар. Перемешайте венчиком до полного растворения сахара. От тепла сахар довольно быстро растает.Добавьте в масло яйцо. Предварительно все-таки проверьте масло, не горячее ли оно, иначе яйцо может свариться. Перемешайте яйцо с маслом до однородности.Всыпьте муку, добавьте ванилин.Перемешайте массу венчиком до состояния гладкого однородного теста.Разогрейте вафельницу по инструкции к ней. У меня очень старая, еще советских времен электровафельница. Она может и не очень красивая, но печет замечательно!Я не смазываю вафельницу маслом, в тесте достаточно жира, да и к ней уже давно ничего не прилипает. Но вы смотрите по своей модели. Выкладывайте тесто по столовой ложке.Пеките вафли несколько минут до золотистого цвета. Осторожно откройте вафельницу, она очень горячая! Снимите вафлю лопаткой. Горячая она очень мягкая, как блинчик.",
+    "name": "ВАФЛИ ХРУСТЯЩИЕ В ВАФЕЛЬНИЦЕ",
+    "receipts_list": [
+        {
+            "name": "Пшеничная мука",
+            "nomenclature": {
+                "full_name": "",
+                "name": "Пшеничная мука",
+                "nom_group": {
+                    "name": "Ингредиенты",
+                    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                },
+                "range": {
+                    "base_range": {
+                        "base_range": null,
+                        "coefficient": 1,
+                        "name": "грамм",
+                        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                    },
+                    "coefficient": 1000,
+                    "name": "киллограмм",
+                    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                },
+                "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+            },
+            "size": 100,
+            "unique_code": "68ff74d185034baeba1b31b4ce06486f",
+            "unit": {
+                "base_range": null,
+                "coefficient": 1,
+                "name": "грамм",
+                "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+            }
+        },
+        {
+            "name": "Сахар",
+            "nomenclature": {
+                "full_name": "",
+                "name": "Сахар",
+                "nom_group": {
+                    "name": "Ингредиенты",
+                    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                },
+                "range": {
+                    "base_range": {
+                        "base_range": null,
+                        "coefficient": 1,
+                        "name": "грамм",
+                        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                    },
+                    "coefficient": 1000,
+                    "name": "киллограмм",
+                    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                },
+                "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+            },
+            "size": 80,
+            "unique_code": "68ff74d185034baeba1b31b4ce06486f",
+            "unit": {
+                "base_range": null,
+                "coefficient": 1,
+                "name": "грамм",
+                "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+            }
+        },
+        {
+            "name": "Сливочное масло",
+            "nomenclature": {
+                "full_name": "",
+                "name": "Сливочное масло",
+                "nom_group": {
+                    "name": "Ингредиенты",
+                    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                },
+                "range": {
+                    "base_range": {
+                        "base_range": null,
+                        "coefficient": 1,
+                        "name": "грамм",
+                        "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                    },
+                    "coefficient": 1000,
+                    "name": "киллограмм",
+                    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                },
+                "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+            },
+            "size": 70,
+            "unique_code": "68ff74d185034baeba1b31b4ce06486f",
+            "unit": {
+                "base_range": null,
+                "coefficient": 1,
+                "name": "грамм",
+                "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+            }
+        },
+        {
+            "name": "Яйца",
+            "nomenclature": {
+                "full_name": "",
+                "name": "Яйца",
+                "nom_group": {
+                    "name": "Ингредиенты",
+                    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                },
+                "range": {
+                    "base_range": null,
+                    "coefficient": 1,
+                    "name": "штука",
+                    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                },
+                "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+            },
+            "size": 1,
+            "unique_code": "68ff74d185034baeba1b31b4ce06486f",
+            "unit": {
+                "base_range": null,
+                "coefficient": 1,
+                "name": "штука",
+                "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+            }
+        },
+        {
+            "name": "Ванилин",
+            "nomenclature": {
+                "full_name": "",
+                "name": "Ванилин",
+                "nom_group": {
+                    "name": "Ингредиенты",
+                    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                },
+                "range": {
+                    "base_range": null,
+                    "coefficient": 1,
+                    "name": "грамм",
+                    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+                },
+                "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+            },
+            "size": 5,
+            "unique_code": "68ff74d185034baeba1b31b4ce06486f",
+            "unit": {
+                "base_range": null,
+                "coefficient": 1,
+                "name": "грамм",
+                "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+            }
+        }
+    ],
+    "unique_code": "68ff74d185034baeba1b31b4ce06486f"
+},]
