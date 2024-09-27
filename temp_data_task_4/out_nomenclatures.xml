@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nomenclatures>
+<item>
+<full_name></full_name>
+<name>Пшеничная мука</name>
+<nom_group>Ингредиенты</nom_group>
+<range>киллограмм</range>
+<unique_code>d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95</unique_code>
+</item>
+<item>
+<full_name></full_name>
+<name>Сахар</name>
+<nom_group>Ингредиенты</nom_group>
+<range>киллограмм</range>
+<unique_code>d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95</unique_code>
+</item>
+<item>
+<full_name></full_name>
+<name>Сливочное масло</name>
+<nom_group>Ингредиенты</nom_group>
+<range>киллограмм</range>
+<unique_code>d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95</unique_code>
+</item>
+<item>
+<full_name></full_name>
+<name>Яйца</name>
+<nom_group>Ингредиенты</nom_group>
+<range>штука</range>
+<unique_code>d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95</unique_code>
+</item>
+<item>
+<full_name></full_name>
+<name>Ванилин</name>
+<nom_group>Ингредиенты</nom_group>
+<range>грамм</range>
+<unique_code>d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95</unique_code>
+</item>
+<item>
+<full_name></full_name>
+<name>Куринное филе</name>
+<nom_group>Ингредиенты</nom_group>
+<range>киллограмм</range>
+<unique_code>d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95</unique_code>
+</item>
+<item>
+<full_name></full_name>
+<name>Салат Романо</name>
+<nom_group>Ингредиенты</nom_group>
+<range>грамм</range>
+<unique_code>d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95</unique_code>
+</item>
+<item>
+<full_name></full_name>
+<name>Сыр Пармезан</name>
+<nom_group>Ингредиенты</nom_group>
+<range>киллограмм</range>
+<unique_code>d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95</unique_code>
+</item>
+<item>
+<full_name></full_name>
+<name>Чеснок</name>
+<nom_group>Ингредиенты</nom_group>
+<range>киллограмм</range>
+<unique_code>d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95</unique_code>
+</item>
+</nomenclatures>

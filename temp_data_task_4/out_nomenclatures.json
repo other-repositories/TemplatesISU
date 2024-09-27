@@ -1,0 +1,70 @@
+{
+    "nomenclatures": {
+      "item": [
+        {
+          "full_name": "",
+          "name": "Пшеничная мука",
+          "nom_group": "Ингредиенты",
+          "range": "килограмм",
+          "unique_code": "d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95"
+        },
+        {
+          "full_name": "",
+          "name": "Сахар",
+          "nom_group": "Ингредиенты",
+          "range": "килограмм",
+          "unique_code": "d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95"
+        },
+        {
+          "full_name": "",
+          "name": "Сливочное масло",
+          "nom_group": "Ингредиенты",
+          "range": "килограмм",
+          "unique_code": "d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95"
+        },
+        {
+          "full_name": "",
+          "name": "Яйца",
+          "nom_group": "Ингредиенты",
+          "range": "штука",
+          "unique_code": "d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95"
+        },
+        {
+          "full_name": "",
+          "name": "Ванилин",
+          "nom_group": "Ингредиенты",
+          "range": "грамм",
+          "unique_code": "d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95"
+        },
+        {
+          "full_name": "",
+          "name": "Куринное филе",
+          "nom_group": "Ингредиенты",
+          "range": "килограмм",
+          "unique_code": "d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95"
+        },
+        {
+          "full_name": "",
+          "name": "Салат Романо",
+          "nom_group": "Ингредиенты",
+          "range": "грамм",
+          "unique_code": "d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95"
+        },
+        {
+          "full_name": "",
+          "name": "Сыр Пармезан",
+          "nom_group": "Ингредиенты",
+          "range": "килограмм",
+          "unique_code": "d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95"
+        },
+        {
+          "full_name": "",
+          "name": "Чеснок",
+          "nom_group": "Ингредиенты",
+          "range": "килограмм",
+          "unique_code": "d1cbee4a-26f6-4ffa-8b8a-79ca9e53cd95"
+        }
+      ]
+    }
+  }
+  
