@@ -69,6 +69,9 @@ class start_service:
         items.append( nom_group_model.create_group())
         return items         
     
+    def get_storage(self):
+        return self.__storage
+
     @staticmethod
     def create_receipt(name, items, extra, full_desc, _data_nom: list = None) -> list:    
         if _data_nom is None:
@@ -80,9 +83,8 @@ class start_service:
             raise argument_exception("List empty")        
         
         item = receipt_model.create_receipt(name, extra, items, data)
-        item.full_desc.extend(full_desc)
+        item.full_desc = full_desc
         return item
-
 
     def create(self, receipt_dict) -> bool:    
         nomenclatures = start_service.create_nomenclatures()
@@ -93,9 +95,9 @@ class start_service:
         
         item = start_service.create_receipt(name,ingredients, extra, instructions, nomenclatures)
         self.__storage.add_recipe(item)
-
-        start_service.create_units()
-        start_service.create_groups()
+        self.__storage.add_items("nomenclatures",nomenclatures)
+        self.__storage.add_items("units",start_service.create_units())
+        self.__storage.add_items("groups",start_service.create_groups())
 
         return True
              

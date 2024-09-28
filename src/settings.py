@@ -1,6 +1,22 @@
 from  src.errors.error_utils import error_proxy, operation_exception, argument_exception
+from enum import Enum
+from src.markdown_report import markdown_report
+from src.csv_report import csv_report
+from src.json_report import json_report
+from src.xml_report import xml_report
+from src.rtf_report import rtf_report
+
+class ConvertTypes(Enum):
+    XML = "xml"
+    CSV = "csv"
+    JSON = "json"
+    RTF = "rtf"
+    MD = "markdown"
 
 class settings:
+    _mode = ConvertTypes.CSV.value
+    _maps = {}
+
     def __init__(self):
         self.inn = "0" * 12
         self.account_number = "0" * 11
@@ -8,6 +24,11 @@ class settings:
         self.bik = "0" * 9
         self.organization_name = ""
         self.ownership_type = "0" * 5
+        self._maps[ConvertTypes.CSV.value]  = csv_report
+        self._maps[ConvertTypes.MD.value] = markdown_report
+        self._maps[ConvertTypes.JSON.value] = json_report
+        self._maps[ConvertTypes.XML.value] = xml_report
+        self._maps[ConvertTypes.RTF.value] = rtf_report
 
     @property
     def inn(self):
@@ -67,3 +88,15 @@ class settings:
             raise argument_exception("Вид собственности должен содержать ровно 5 символов.")
         self._ownership_type = value
 
+    @property
+    def report_mode(self):
+        return self._mode
+    
+    @report_mode.setter
+    def report_mode(self, value: str):
+        error_proxy.check(value, str)
+        
+        self._mode = value
+
+    def get_convert_types(self):
+        return self._maps

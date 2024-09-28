@@ -31,7 +31,7 @@ class error_proxy(Exception):
         super().__init__(*args)
         self.__error.set_error(self)
 
-    # Validate information
+    # check information
     @staticmethod
     def check( value, type_, len_= None):
         if value is None:

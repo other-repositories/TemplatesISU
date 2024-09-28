@@ -3,10 +3,17 @@ from src.models.receipt_model_unit import receipt_model_unit
 
 class storage_repository:
     def __init__(self):
-        self.recipes = []  # Список для хранения рецептов
+        self.recipes = {}
+        self.recipes["recipes"] = []  # Список для хранения рецептов
 
     def add_recipe(self, recipe):
-        self.recipes.append(recipe)
+        self.recipes["recipes"].append(recipe)
+
+    def add_items(self, name,  items):
+        self.recipes[name] = items
+
+    def get_data(self):
+        return self.recipes # todo other models
 
     def dump(self):
         if not self.recipes:

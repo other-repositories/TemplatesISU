@@ -5,13 +5,13 @@ from src.models.nomenclature_model import nomenclature_model
 
 class receipt_model(abstract_reference):
     _receipts_list = {}
-    _full_desc = list()
+    _full_desc: str = ""
     _extra_info: str = ""
     
     def __init__(self, name = None):
         super().__init__(name)
         self._receipts_list = {}
-        self._full_desc = []
+        self._full_desc = ""
             
     def add(self, row: receipt_model_unit):
         error_proxy.check(row, receipt_model_unit)
@@ -22,9 +22,13 @@ class receipt_model(abstract_reference):
             self._receipts_list.pop(row.name)   
         
     @property    
-    def full_desc(self) -> list:
-        return self._full_desc  
+    def full_desc(self) -> str:
+        return self._full_desc
     
+    @full_desc.setter   
+    def full_desc(self, list):
+        self._full_desc = str().join(list)
+
     @property
     def extra_info(self) -> str:
         return self._extra_info
@@ -38,6 +42,7 @@ class receipt_model(abstract_reference):
     def receipts_list(self) -> list:
         return self._receipts_list    
     
+    @receipts_list.setter
     def receipts_list(self) -> list:
         result = []
         for key in self._receipts_list.keys():

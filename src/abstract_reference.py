@@ -42,8 +42,20 @@ class abstract_reference(ABC):
             result[ position.name ] = position
         return result           
             
+    @staticmethod
+    def create_fields(source) -> list:
+        if source is None:
+            raise argument_exception("Некорректно переданы параметры!")
         
-    
+        items = list(filter(lambda x: not x.startswith("_") and not x.startswith("create_") , dir(source))) 
+        result = []
+        
+        for item in items:
+            attribute = getattr(source.__class__, item)
+            if isinstance(attribute, property):
+                result.append(item)    
+                
+        return result
     
     
     
