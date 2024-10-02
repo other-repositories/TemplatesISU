@@ -4,11 +4,14 @@ from  src.models.nom_group_model import nom_group_model
 from  src.errors.error_utils import error_proxy, argument_exception, operation_exception
 
 class nomenclature_model(abstract_reference):
-    _nom_group = None
-    _range = None
-    _full_name = None
+    _nom_group: nom_group_model
+    _range: range_model 
+    _full_name = ''
     
     def __init__(self, full_name:str = None, name:str = None, nom_group: abstract_reference = None, range: abstract_reference = None):
+        self._nom_group = nom_group_model()
+        self._range = range_model() 
+        self._full_name = ''
         if nom_group is not None:
             self.nom_group = nom_group
         if range is not None:    

@@ -10,6 +10,11 @@ class abstract_reference(ABC):
     @property
     def unique_code(self) -> str:
         return self.__unique_code
+    
+    @unique_code.setter
+    def unique_code(self, st) -> str:
+        self.__unique_code = st
+
 
     def __init__(self, name = None):
         if(name is not None):
