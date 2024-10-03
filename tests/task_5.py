@@ -1,9 +1,39 @@
 from src.deserializer_json import json_deserializer
 from src.models.receipt_model import receipt_model
 from src.models.nomenclature_model import nomenclature_model
+from src.start_service import start_service
+from src.settings_manager import settings_manager
+from src.report_factory import report_factory
+from src.models.nom_group_model import nom_group_model
+from src.models.range_model import range_model
 import json 
 import pytest
 import uuid
+from deepdiff import DeepDiff
+
+def  prepare_json_out(data):
+    if isinstance(data, dict):
+        for key, value in data.items():
+            if isinstance(value, str):
+                try:
+                    nested_value = json.loads(value)
+                    data[key] = prepare_json_out(nested_value)
+                except json.JSONDecodeError:
+                    pass
+            elif isinstance(value, dict) or isinstance(value, list):
+                data[key] = prepare_json_out(value)
+    elif isinstance(data, list):
+        for i in range(len(data)):
+            if isinstance(data[i], str):
+                try:
+                    nested_value = json.loads(data[i])
+                    data[i] = prepare_json_out(nested_value)
+                except json.JSONDecodeError:
+                    pass
+            elif isinstance(data[i], dict) or isinstance(data[i], list):
+                data[i] = prepare_json_out(data[i])
+    
+    return data
 
 def read_json_from_file(filename):
     with open(filename, 'r', encoding='utf-8') as f:
@@ -20,7 +50,7 @@ def test_receipts():
     assert receipt.receipts_list[1].nomenclature.range.coefficient == 1000
     assert receipt.receipts_list[1].unit.name == "грамм"
 
-def test_nomenclatures():
+def test_nomenclatures_1():
     des = json_deserializer()
     receipt = des.deserialize(read_json_from_file("temp_data_task_4/test_1.json")[3], nomenclature_model)
 
@@ -30,3 +60,136 @@ def test_nomenclatures():
     assert receipt.nom_group.name == "Ингредиенты"
     assert receipt.range.name == "штука"
     assert receipt.range.coefficient == 1
+
+def test_nomenclatures_2():
+    manager = settings_manager()
+    manager.current_settings.report_mode = "json"
+    start = start_service( manager.current_settings )
+
+    with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
+        start.create(json.load(file))
+
+    factory = report_factory(manager.current_settings)
+    
+    # Действие
+    report = factory.create(None, start.get_storage().get_data())
+
+    # Проверки
+    assert report is not None
+    data = report.create("nomenclatures")
+    with open('temp_data_task_4/temp.json', 'w' , encoding='utf-8') as f:
+        f.write("[")
+        i = 0
+        for elem in data:
+            parsed_data = json.loads(elem)
+            corrected_data = prepare_json_out(parsed_data)   
+            f.write(json.dumps(corrected_data, ensure_ascii=False, indent=4))
+            if (i != len(data)-1):
+                i+=1
+                f.write(",")
+        f.write("]")
+
+    des = json_deserializer()
+    receipt = des.deserialize(read_json_from_file("temp_data_task_4/temp.json")[3], nomenclature_model)
+
+    diff = DeepDiff(receipt, start.get_storage().get_data()['nomenclatures'][3])
+    assert(diff == {})
+
+def test_receipts_2():
+    manager = settings_manager()
+    manager.current_settings.report_mode = "json"
+    start = start_service( manager.current_settings )
+
+    with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
+        start.create(json.load(file))
+
+    factory = report_factory(manager.current_settings)
+    
+    # Действие
+    report = factory.create(None, start.get_storage().get_data())
+
+    # Проверки
+    assert report is not None
+    data = report.create("recipes")
+    with open('temp_data_task_4/temp.json', 'w' , encoding='utf-8') as f:
+        f.write("[")
+        i = 0
+        for elem in data:
+            parsed_data = json.loads(elem)
+            corrected_data = prepare_json_out(parsed_data)   
+            f.write(json.dumps(corrected_data, ensure_ascii=False, indent=4))
+            if (i != len(data)-1):
+                i+=1
+                f.write(",")
+        f.write("]")
+
+    des = json_deserializer()
+    receipt = des.deserialize(read_json_from_file("temp_data_task_4/temp.json")[0], receipt_model)
+    diff = DeepDiff(receipt, start.get_storage().get_data()['recipes'][0])
+    assert(diff == {})
+
+def test_nom_group():
+    manager = settings_manager()
+    manager.current_settings.report_mode = "json"
+    start = start_service( manager.current_settings )
+
+    with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
+        start.create(json.load(file))
+
+    factory = report_factory(manager.current_settings)
+    
+    # Действие
+    report = factory.create(None, start.get_storage().get_data())
+
+    # Проверки
+    assert report is not None
+    data = report.create("groups")
+    with open('temp_data_task_4/temp.json', 'w' , encoding='utf-8') as f:
+        f.write("[")
+        i = 0
+        for elem in data:
+            parsed_data = json.loads(elem)
+            corrected_data = prepare_json_out(parsed_data)   
+            f.write(json.dumps(corrected_data, ensure_ascii=False, indent=4))
+            if (i != len(data)-1):
+                i+=1
+                f.write(",")
+        f.write("]")
+
+    des = json_deserializer()
+    receipt = des.deserialize(read_json_from_file("temp_data_task_4/temp.json")[0], nom_group_model)
+    diff = DeepDiff(receipt, start.get_storage().get_data()['groups'][0])
+    assert(diff == {})
+
+def test_units():
+    manager = settings_manager()
+    manager.current_settings.report_mode = "json"
+    start = start_service( manager.current_settings )
+
+    with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
+        start.create(json.load(file))
+
+    factory = report_factory(manager.current_settings)
+    
+    # Действие
+    report = factory.create(None, start.get_storage().get_data())
+
+    # Проверки
+    assert report is not None
+    data = report.create("units")
+    with open('temp_data_task_4/temp.json', 'w' , encoding='utf-8') as f:
+        f.write("[")
+        i = 0
+        for elem in data:
+            parsed_data = json.loads(elem)
+            corrected_data = prepare_json_out(parsed_data)   
+            f.write(json.dumps(corrected_data, ensure_ascii=False, indent=4))
+            if (i != len(data)-1):
+                i+=1
+                f.write(",")
+        f.write("]")
+
+    des = json_deserializer()
+    receipt = des.deserialize(read_json_from_file("temp_data_task_4/temp.json")[0], range_model)
+    diff = DeepDiff(receipt, start.get_storage().get_data()['units'][0])
+    assert(diff == {})

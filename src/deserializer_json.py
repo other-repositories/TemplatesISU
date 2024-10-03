@@ -80,7 +80,7 @@ class json_deserializer:
     def _get_reference_class(self, field: str):
         # Получаем соответствующий класс модели по имени поля
         for inheritor in abstract_reference.__subclasses__():
-            if inheritor.__name__.lower() == 'range_model' and field.lower() == 'base_range' or field.lower() == 'unit':
+            if inheritor.check_synonym(inheritor.__name__.lower(), field.lower()):
                 return inheritor
             if inheritor.__name__.lower().replace('_model','') == field.lower():
                 return inheritor

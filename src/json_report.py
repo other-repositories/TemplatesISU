@@ -10,7 +10,7 @@ class json_report(abstract_report):
 
     _maps = {}
     def uuid_convertor(self, field, object: uuid.UUID):
-        return {field:object.hex}
+        return {field:str(object)}
     def basic_convertor(self, field: str, object):
         return { field: object }
     def reference_convertor(self,field: str, object):

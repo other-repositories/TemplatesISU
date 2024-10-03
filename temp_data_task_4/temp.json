@@ -1,0 +1,21 @@
+[{
+    "base_range": null,
+    "coefficient": 1,
+    "name": "грамм",
+    "unique_code": "68f2ca98-a02b-44a8-8525-0459120d19a2"
+},{
+    "base_range": {
+        "base_range": null,
+        "coefficient": 1,
+        "name": "грамм",
+        "unique_code": "a8473737-ccce-4a64-881b-e73a9c76f70e"
+    },
+    "coefficient": 1000,
+    "name": "киллограмм",
+    "unique_code": "b3a180c7-b3e8-4c85-b07d-463fe7e69678"
+},{
+    "base_range": null,
+    "coefficient": 1,
+    "name": "штука",
+    "unique_code": "23e008a1-1223-4904-ba5f-c05e0e0c809d"
+}]

@@ -4,9 +4,10 @@ import uuid
 from  src.errors.error_utils import error_proxy, argument_exception, operation_exception
 
 class abstract_reference(ABC):
-    __unique_code:str =  uuid.uuid4()
+    __unique_code:str 
     _name = ""
-    
+    _synonym_list = {'range_model' : ["unit", "base_range"]} # todo static polymor for other abstract classes, there all instances
+
     @property
     def unique_code(self) -> str:
         return self.__unique_code
@@ -17,6 +18,7 @@ class abstract_reference(ABC):
 
 
     def __init__(self, name = None):
+        self.__unique_code =  str(uuid.uuid4())
         if(name is not None):
             self._name = name
     
@@ -61,6 +63,12 @@ class abstract_reference(ABC):
                 result.append(item)    
                 
         return result
+    
+    def check_synonym(property, name):
+        value = property
+        if(value in abstract_reference._synonym_list):
+            return name in abstract_reference._synonym_list[value]
+
     
     
     
