@@ -6,14 +6,13 @@ class range_model(abstract_reference):
     _coefficient: int = 1
     
     def __init__(self, name: str = None, base: abstract_reference = None, coefficient: int = 1 ):
-
+        #self._synonym_list = {'range_model' : ["unit", "base_range"]}
         if base is not None:
             self.base_range = base
         if coefficient is not None:
             self.coefficient = coefficient   
 
         super().__init__(name)
-        
     
     @property
     def base_range(self) -> abstract_reference:

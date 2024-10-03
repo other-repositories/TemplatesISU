@@ -15,7 +15,7 @@ class receipt_model(abstract_reference):
             
     def add(self, row: receipt_model_unit):
         error_proxy.check(row, receipt_model_unit)
-        self._receipts_list.push(row)
+        self._receipts_list.append(row)
         
     def delete(self, name):
         if name in self._receipts_list.keys():
