@@ -4,18 +4,18 @@ from src.errors.error_utils import error_proxy, argument_exception, operation_ex
 from src.models.nomenclature_model import nomenclature_model
 
 class receipt_model(abstract_reference):
-    _receipts_list = {}
+    _receipts_list: receipt_model_unit = []
     _full_desc: str = ""
     _extra_info: str = ""
     
     def __init__(self, name = None):
         super().__init__(name)
-        self._receipts_list = {}
+        self._receipts_list = []
         self._full_desc = ""
             
     def add(self, row: receipt_model_unit):
         error_proxy.check(row, receipt_model_unit)
-        self._receipts_list[row.name] = row
+        self._receipts_list.append(row)
         
     def delete(self, name):
         if name in self._receipts_list.keys():
@@ -43,11 +43,8 @@ class receipt_model(abstract_reference):
         return self._receipts_list    
     
     @receipts_list.setter
-    def receipts_list(self) -> list:
-        result = []
-        for key in self._receipts_list.keys():
-            result.append( self._receipts_list[key] )
-        return result
+    def receipts_list(self, arr) -> list:
+        self._receipts_list = arr
     
     @staticmethod
     def create_receipt(name: str, extra_info: str, items: list, data: list):
