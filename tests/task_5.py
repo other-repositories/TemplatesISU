@@ -10,30 +10,8 @@ import json
 import pytest
 import uuid
 from deepdiff import DeepDiff
-
-def  prepare_json_out(data):
-    if isinstance(data, dict):
-        for key, value in data.items():
-            if isinstance(value, str):
-                try:
-                    nested_value = json.loads(value)
-                    data[key] = prepare_json_out(nested_value)
-                except json.JSONDecodeError:
-                    pass
-            elif isinstance(value, dict) or isinstance(value, list):
-                data[key] = prepare_json_out(value)
-    elif isinstance(data, list):
-        for i in range(len(data)):
-            if isinstance(data[i], str):
-                try:
-                    nested_value = json.loads(data[i])
-                    data[i] = prepare_json_out(nested_value)
-                except json.JSONDecodeError:
-                    pass
-            elif isinstance(data[i], dict) or isinstance(data[i], list):
-                data[i] = prepare_json_out(data[i])
-    
-    return data
+from src.common import common
+import random
 
 def read_json_from_file(filename):
     with open(filename, 'r', encoding='utf-8') as f:
@@ -61,7 +39,7 @@ def test_nomenclatures_1():
     assert receipt.range.name == "штука"
     assert receipt.range.coefficient == 1
 
-def test_nomenclatures_2():
+def common_test(type_conv, model_type, is_full_list):
     manager = settings_manager()
     manager.current_settings.report_mode = "json"
     start = start_service( manager.current_settings )
@@ -76,13 +54,13 @@ def test_nomenclatures_2():
 
     # Проверки
     assert report is not None
-    data = report.create("nomenclatures")
+    data = report.create(type_conv)
     with open('temp_data_task_4/temp.json', 'w' , encoding='utf-8') as f:
         f.write("[")
         i = 0
         for elem in data:
             parsed_data = json.loads(elem)
-            corrected_data = prepare_json_out(parsed_data)   
+            corrected_data = common.prepare_json_out(parsed_data)   
             f.write(json.dumps(corrected_data, ensure_ascii=False, indent=4))
             if (i != len(data)-1):
                 i+=1
@@ -90,106 +68,39 @@ def test_nomenclatures_2():
         f.write("]")
 
     des = json_deserializer()
-    receipt = des.deserialize(read_json_from_file("temp_data_task_4/temp.json")[3], nomenclature_model)
+    data = read_json_from_file("temp_data_task_4/temp.json")
 
-    diff = DeepDiff(receipt, start.get_storage().get_data()['nomenclatures'][3])
-    assert(diff == {})
+    if(not is_full_list):
+        rand_data_index = random.randint(0, len(data)-1)
+        receipt = des.deserialize(data[rand_data_index], model_type)
+        diff = DeepDiff(receipt, start.get_storage().get_data()[type_conv][rand_data_index])
+        assert(diff == {})
+    else:
+        for i in range(len(data)):
+            receipt = des.deserialize(data[i], model_type)
+            diff = DeepDiff(receipt, start.get_storage().get_data()[type_conv][i])
+            assert(diff == {})
+
+def test_nomenclatures_2():
+    common_test("nomenclatures", nomenclature_model, False)
 
 def test_receipts_2():
-    manager = settings_manager()
-    manager.current_settings.report_mode = "json"
-    start = start_service( manager.current_settings )
-
-    with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
-        start.create(json.load(file))
-
-    factory = report_factory(manager.current_settings)
-    
-    # Действие
-    report = factory.create(None, start.get_storage().get_data())
-
-    # Проверки
-    assert report is not None
-    data = report.create("recipes")
-    with open('temp_data_task_4/temp.json', 'w' , encoding='utf-8') as f:
-        f.write("[")
-        i = 0
-        for elem in data:
-            parsed_data = json.loads(elem)
-            corrected_data = prepare_json_out(parsed_data)   
-            f.write(json.dumps(corrected_data, ensure_ascii=False, indent=4))
-            if (i != len(data)-1):
-                i+=1
-                f.write(",")
-        f.write("]")
-
-    des = json_deserializer()
-    receipt = des.deserialize(read_json_from_file("temp_data_task_4/temp.json")[0], receipt_model)
-    diff = DeepDiff(receipt, start.get_storage().get_data()['recipes'][0])
-    assert(diff == {})
+    common_test("recipes", receipt_model, False)
 
 def test_nom_group():
-    manager = settings_manager()
-    manager.current_settings.report_mode = "json"
-    start = start_service( manager.current_settings )
-
-    with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
-        start.create(json.load(file))
-
-    factory = report_factory(manager.current_settings)
-    
-    # Действие
-    report = factory.create(None, start.get_storage().get_data())
-
-    # Проверки
-    assert report is not None
-    data = report.create("groups")
-    with open('temp_data_task_4/temp.json', 'w' , encoding='utf-8') as f:
-        f.write("[")
-        i = 0
-        for elem in data:
-            parsed_data = json.loads(elem)
-            corrected_data = prepare_json_out(parsed_data)   
-            f.write(json.dumps(corrected_data, ensure_ascii=False, indent=4))
-            if (i != len(data)-1):
-                i+=1
-                f.write(",")
-        f.write("]")
-
-    des = json_deserializer()
-    receipt = des.deserialize(read_json_from_file("temp_data_task_4/temp.json")[0], nom_group_model)
-    diff = DeepDiff(receipt, start.get_storage().get_data()['groups'][0])
-    assert(diff == {})
+    common_test("groups", nom_group_model, False)
 
 def test_units():
-    manager = settings_manager()
-    manager.current_settings.report_mode = "json"
-    start = start_service( manager.current_settings )
+    common_test("units",range_model, False)
 
-    with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
-        start.create(json.load(file))
+def test_nomenclatures_2_full_list():
+    common_test("nomenclatures", nomenclature_model, True)
 
-    factory = report_factory(manager.current_settings)
-    
-    # Действие
-    report = factory.create(None, start.get_storage().get_data())
+def test_receipts_2_full_lis():
+    common_test("recipes", receipt_model, True)
 
-    # Проверки
-    assert report is not None
-    data = report.create("units")
-    with open('temp_data_task_4/temp.json', 'w' , encoding='utf-8') as f:
-        f.write("[")
-        i = 0
-        for elem in data:
-            parsed_data = json.loads(elem)
-            corrected_data = prepare_json_out(parsed_data)   
-            f.write(json.dumps(corrected_data, ensure_ascii=False, indent=4))
-            if (i != len(data)-1):
-                i+=1
-                f.write(",")
-        f.write("]")
+def test_nom_group_full_lis():
+    common_test("groups", nom_group_model, True)
 
-    des = json_deserializer()
-    receipt = des.deserialize(read_json_from_file("temp_data_task_4/temp.json")[0], range_model)
-    diff = DeepDiff(receipt, start.get_storage().get_data()['units'][0])
-    assert(diff == {})
+def test_units_full_lis():
+    common_test("units",range_model, True)
