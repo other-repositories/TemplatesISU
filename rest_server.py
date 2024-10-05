@@ -118,4 +118,4 @@ def get_report(format_type: str):
             return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
     
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug = True)
+    app.run(host="0.0.0.0", port=8080, debug = True)
