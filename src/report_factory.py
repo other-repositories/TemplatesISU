@@ -5,7 +5,7 @@ from src.json_report import json_report
 from src.xml_report import xml_report
 from src.rtf_report import rtf_report
 from src.errors.error_utils import error_proxy, operation_exception, argument_exception
-from src.settings import ConvertTypes, settings
+from src.settings import settings
 #
 # Фабрика для отчетов
 #

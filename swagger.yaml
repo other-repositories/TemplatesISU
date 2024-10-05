@@ -1,0 +1,57 @@
+openapi: 3.0.0
+info:
+  title: Report API
+  version: 1.0.0
+  description: API для генерации отчетов в разных форматах.
+
+servers:
+  - url: http://127.0.0.1:5000
+
+paths:
+  /api/report_types:
+    get:
+      summary: Получить список типов отчетов.
+      responses:
+        '200':
+          description: Список доступных форматов отчетов.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '500':
+          description: Ошибка при формировании отчета.
+          
+  /api/get_report/{format_type}:
+    get:
+      summary: Получить отчет в указанном формате.
+      parameters:
+        - in: path
+          name: format_type
+          required: true
+          schema:
+            type: string
+          description: Формат отчета (например, json, csv и т.д.)
+      responses:
+        '200':
+          description: Отчет в указанном формате.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  recipes:
+                    type: array
+                    description: Список рецептов.
+                  nomenclatures:
+                    type: array
+                    description: Список номенклатур.
+                  groups:
+                    type: array
+                    description: Список групп.
+                  units:
+                    type: array
+                    description: Список единиц измерения.
+        '500':
+          description: Ошибка при формировании отчета.
