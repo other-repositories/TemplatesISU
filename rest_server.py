@@ -99,7 +99,7 @@ def get_recipes(convert_type):
     try:
         return process_report_data("recipes", convert_type)
     except Exception as ex:
-        return str(ex)
+        return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
 
 @app.route("/api/nomenclatures/<convert_type>", methods=["GET"])
@@ -127,7 +127,7 @@ def get_nomenclatures(convert_type):
     try:
         return process_report_data("nomenclatures", convert_type)
     except Exception as ex:
-        return str(ex)
+        return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
 
 @app.route("/api/groups/<convert_type>", methods=["GET"])
@@ -155,7 +155,7 @@ def get_groups(convert_type):
     try:
         return process_report_data("groups", convert_type)
     except Exception as ex:
-        return str(ex)
+        return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
 
 @app.route("/api/units/<convert_type>", methods=["GET"])
@@ -183,7 +183,7 @@ def get_units(convert_type):
     try:
         return process_report_data("units", convert_type)
     except Exception as ex:
-        return str(ex)
+        return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
 
 if __name__ == "__main__":
