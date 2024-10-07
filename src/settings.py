@@ -6,14 +6,15 @@ from src.json_report import json_report
 from src.xml_report import xml_report
 from src.rtf_report import rtf_report
 
-class ConvertTypes(Enum):
-    XML = "xml"
-    CSV = "csv"
-    JSON = "json"
-    RTF = "rtf"
-    MD = "markdown"
-
 class settings:
+
+    class ConvertTypes(Enum):
+        XML = "xml"
+        CSV = "csv"
+        JSON = "json"
+        RTF = "rtf"
+        MD = "markdown"
+
     _mode = ConvertTypes.CSV.value
     _maps = {}
 
@@ -24,11 +25,11 @@ class settings:
         self.bik = "0" * 9
         self.organization_name = ""
         self.ownership_type = "0" * 5
-        self._maps[ConvertTypes.CSV.value]  = csv_report
-        self._maps[ConvertTypes.MD.value] = markdown_report
-        self._maps[ConvertTypes.JSON.value] = json_report
-        self._maps[ConvertTypes.XML.value] = xml_report
-        self._maps[ConvertTypes.RTF.value] = rtf_report
+        self._maps[self.ConvertTypes.CSV.value]  = csv_report
+        self._maps[self.ConvertTypes.MD.value] = markdown_report
+        self._maps[self.ConvertTypes.JSON.value] = json_report
+        self._maps[self.ConvertTypes.XML.value] = xml_report
+        self._maps[self.ConvertTypes.RTF.value] = rtf_report
 
     @property
     def inn(self):

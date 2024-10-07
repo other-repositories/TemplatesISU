@@ -44,7 +44,28 @@ class error_proxy(Exception):
             raise argument_exception(f"Incorrect len {len_}")
 
         return True    
+    
+    @staticmethod    
+    def create_error_response( app,  message: str, http_code: int = 0):
+        if app is None:
+            raise Exception("Некорректно переданы параметры!")
+        
+        if http_code == 0:
+            code = 500
+        else:
+            code = http_code
+        
+        # Формируем описание        
+        json_text = json.dumps({"details" : message}, sort_keys = True, indent = 4,  ensure_ascii = False)  
 
+        result = app.response_class(
+            response =   f"{json_text}",
+            status = code,
+            mimetype = "application/json; charset=utf-8"
+        )    
+        
+        return result
+    
     @property    
     def error(self):
         return self.__error    
