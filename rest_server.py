@@ -14,18 +14,11 @@ app.config['JSON_AS_ASCII'] = False
 
 manager = settings_manager()
 start = start_service(manager.current_settings)
-
+factory = report_factory(manager.current_settings)
 
 def process_report_data(type, format_type):
     try:
-        manager = settings_manager()
         manager.current_settings.report_mode = format_type
-        start = start_service(manager.current_settings)
-
-        with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
-            start.create(json.load(file))
-
-        factory = report_factory(manager.current_settings)
         report = factory.create(None, start.get_storage().get_data())
 
         out = ''
