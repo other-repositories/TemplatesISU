@@ -5,7 +5,7 @@
             "name": "Python Debugger: Current File",
             "type": "debugpy",
             "request": "launch",
-            "program": "main.py",
+            "program": "rest_server.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "env": {

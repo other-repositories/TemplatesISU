@@ -6,6 +6,8 @@ from src.common import common
 from flask import Flask, jsonify
 from flasgger import Swagger
 from src.errors.error_utils import error_proxy
+# Пример вложенной модели
+from src.dto_model import FilterDTO, FilterPrototype, FilterType
 
 app = Flask(__name__)
 Swagger(app)
@@ -178,6 +180,101 @@ def get_units(convert_type):
     except Exception as ex:
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
+
+@app.route("/api/dto/<dto_model>/<convert_type>/<model_type>/<name>/<unique_code>", methods=["GET"])
+def dto(dto_model, convert_type, model_type, name, unique_code):
+    """
+    Применить фильтр DTO к данным
+    ---
+    parameters:
+      - in: path
+        name: dto_model
+        required: true
+        schema:
+          type: string
+        description: Тип DTO модели для фильтрации (например, "equals" или "like")
+      - in: path
+        name: convert_type
+        required: true
+        schema:
+          type: string
+        description: Формат отчета (например, "json" или "csv")
+      - in: path
+        name: model_type
+        required: true
+        schema:
+          type: string
+        description: Тип модели, к которой применяется фильтрация (например, "nomenclature" или "group")
+      - in: path
+        name: name
+        required: true
+        schema:
+          type: string
+        description: Наименование для фильтрации
+      - in: path
+        name: unique_code
+        required: true
+        schema:
+          type: string
+        description: Уникальный код для фильтрации
+    responses:
+      200:
+        description: Отфильтрованные данные
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+      500:
+        description: Ошибка при формировании отчета
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Описание ошибки
+    """
+    try:
+        manager.current_settings.report_mode = convert_type
+        report = factory.create(None, start.get_storage().get_data())
+
+        out = ''
+        data = report.create(model_type)
+
+        filter_type=FilterType.LIKE
+
+        if(dto_model == 'equals'):
+            filter_type=FilterType.EQUALS
+
+        filter_dto = FilterDTO(filter_type=filter_type, name=name,unique_code=unique_code )
+
+        # Применяем фильтр
+        filter_prototype = FilterPrototype()
+        if(isinstance(data, list)):
+            filtered_units = filter_prototype.filter(data, filter_dto)
+        else:
+            filtered_units = filter_prototype.filter([data], filter_dto)
+
+        i = 0
+        if convert_type == "json":
+            out += "["
+            for elem in filtered_units:
+                parsed_data = json.loads(elem)
+                corrected_data = common.prepare_json_out(parsed_data)
+                out += json.dumps(corrected_data, ensure_ascii=False, indent=4)
+                if i != len(filtered_units) - 1:
+                    i += 1
+                    out += ","
+            out += "]"
+        else:
+            out += f'"{filtered_units}"'
+        return out
+
+    except Exception as ex:
+        return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
 if __name__ == "__main__":
     # Загрузка начальных данных
