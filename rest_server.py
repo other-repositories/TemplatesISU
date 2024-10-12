@@ -3,7 +3,7 @@ from src.settings_manager import settings_manager
 from src.report_factory import report_factory
 import json
 from src.common import common
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flasgger import Swagger
 from src.errors.error_utils import error_proxy
 # Пример вложенной модели
@@ -181,12 +181,19 @@ def get_units(convert_type):
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
 
-@app.route("/api/dto/<dto_model>/<convert_type>/<model_type>/<name>/<unique_code>", methods=["GET"])
-def dto(dto_model, convert_type, model_type, name, unique_code):
+@app.route("/api/dto/<model_type>/<dto_model>", methods=["GET"])
+@app.route("/api/dto/<model_type>/<dto_model>/<convert_type>", methods=["GET"])
+def dto(model_type, dto_model, convert_type="json"):
     """
     Применить фильтр DTO к данным
     ---
     parameters:
+      - in: path
+        name: model_type
+        required: true
+        schema:
+          type: string
+        description: Тип модели, к которой применяется фильтрация (например, "nomenclature" или "group")
       - in: path
         name: dto_model
         required: true
@@ -195,28 +202,10 @@ def dto(dto_model, convert_type, model_type, name, unique_code):
         description: Тип DTO модели для фильтрации (например, "equals" или "like")
       - in: path
         name: convert_type
-        required: true
+        required: false
         schema:
           type: string
         description: Формат отчета (например, "json" или "csv")
-      - in: path
-        name: model_type
-        required: true
-        schema:
-          type: string
-        description: Тип модели, к которой применяется фильтрация (например, "nomenclature" или "group")
-      - in: path
-        name: name
-        required: true
-        schema:
-          type: string
-        description: Наименование для фильтрации
-      - in: path
-        name: unique_code
-        required: true
-        schema:
-          type: string
-        description: Уникальный код для фильтрации
     responses:
       200:
         description: Отфильтрованные данные
@@ -238,6 +227,9 @@ def dto(dto_model, convert_type, model_type, name, unique_code):
                   description: Описание ошибки
     """
     try:
+        name = request.args.get('name')
+        unique_code = request.args.get('unique_code') 
+
         manager.current_settings.report_mode = convert_type
         report = factory.create(None, start.get_storage().get_data())
 
