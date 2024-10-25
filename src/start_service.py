@@ -8,7 +8,8 @@ from src.abstract_reference import abstract_reference
 from src.models.storage_model import storage_model
 from src.models.receipt_model import receipt_model
 from src.storage import storage_repository
-
+from src.models.storage_model import storage_model
+from src.models.storage_row_model import storage_row_model
 import json
 
 class start_service:
@@ -99,5 +100,37 @@ class start_service:
         self.__storage.add_items("units",start_service.create_units())
         self.__storage.add_items("groups",start_service.create_groups())
 
+        start_service.create_storage_transactions( self.__storage.get_data() )
+        self.__storage.add_items( "storage_row_model", start_service.create_storage_transactions( self.__storage.get_data() ))
+
         return True
              
+    @staticmethod
+    def create_storage_transactions(data: dict) -> list:
+        result = []
+        default_storage = storage_model.create_default()
+            
+        if len(data.keys()) == 0:
+            raise operation_exception("Набор данных пуст. Невозможно сформировать список транзакций!")  
+        items = [ ( "Пшеничная мука", 1, "киллограмм") , 
+                  ( "Сахар" , 0.5, "киллограмм"),
+                  ( "Яйца", 6,"штука" ),
+                  ( "Куринное филе" ,0.5, "киллограмм"),
+                  ( "Салат Романо", 1, "штука" ),
+                  ( "Сыр Пармезан", 0.2, "киллограмм") ,
+                  ( "Сливочное масло" ,0.5, "киллограмм" ),
+                  ( "Ванилин", 100, "грамм" )
+                  ]
+        for element in items:
+            if len(element) < 3:
+                raise operation_exception("Некорректно сформирован список для генерации рецептов!")
+            
+            nomenclature_name = element[0]
+            quantity =  element[1]
+            unit_name = element[2]
+            
+            row = storage_row_model.create_credit_row(nomenclature_name, quantity, unit_name , data, default_storage)
+            result.append(row)
+        
+        return result
+                

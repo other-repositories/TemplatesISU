@@ -52,3 +52,14 @@ class range_model(abstract_reference):
     @staticmethod
     def create_ting():
         return range_model("штука")
+    
+    @staticmethod
+    def get(unit_name: str, units: dict):
+        error_proxy.check(unit_name, str)
+        
+        keys = list(filter(lambda x: x == unit_name, units.keys() ))
+        if len(keys) == 0:
+            raise operation_exception(f"Некоректно передан список. Не найдена unit {unit_name}!")
+                
+        return units[keys[0]]
+  

@@ -5,6 +5,7 @@ from src.models.receipt_model import receipt_model
 
 import json
 import uuid
+from datetime import datetime
 
 class json_report(abstract_report):
 
@@ -16,9 +17,19 @@ class json_report(abstract_report):
     def reference_convertor(self,field: str, object):
         factory = json_report({"temp": object})
         return factory.create("temp")
+    def datetime_convertor(self,field: str, object):
+        if not isinstance(object, datetime):
+          self._error.error = f"Некорректный тип данных передан для конвертации. Ожидается: datetime. Передан: {type(object)}"
+          return None
+      
+        try:
+            return { field: object.strftime('%Y-%m-%d') }
+        except Exception as ex:
+            self.set_error(ex)
 
     def __init__(self, data = None) -> None:
         super().__init__(data)
+        self._maps[datetime] = self.datetime_convertor
         self._maps[int] = self.basic_convertor
         self._maps[float] = self.basic_convertor
         self._maps[str] = self.basic_convertor
