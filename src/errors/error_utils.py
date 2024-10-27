@@ -69,6 +69,16 @@ class error_proxy(Exception):
     @property    
     def error(self):
         return self.__error    
+    
+    def clear(self):
+        self.__error_text = "" 
+
+    @property        
+    def is_empty(self) -> bool:
+        if len(self.__error_text) != 0:
+            return False
+        else:
+            return True  
 
 class argument_exception(error_proxy):
     pass     

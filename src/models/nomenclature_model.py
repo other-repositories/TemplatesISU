@@ -51,8 +51,8 @@ class nomenclature_model(abstract_reference):
     def get(nomenclature_name: str, nomenclatures: dict):
         error_proxy.check(nomenclature_name, str)
         
-        keys = list(filter(lambda x: x == nomenclature_name, nomenclatures.keys() ))
-
+        keys = list(filter(lambda x: x.strip().lower() == nomenclature_name.strip().lower(), nomenclatures.keys() ))
+        #print(nomenclatures.keys(), f"'{nomenclature_name}'",)
         if len(keys) == 0:
             raise operation_exception(f"Inncorect list {nomenclature_name}!")
                 

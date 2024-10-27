@@ -8,9 +8,17 @@ from flasgger import Swagger
 from src.errors.error_utils import error_proxy
 # Пример вложенной модели
 from src.dto_model import FilterDTO, FilterPrototype, FilterType
-
+from datetime import datetime
 app = Flask(__name__)
 Swagger(app)
+
+from src.process_factory import process_factory
+from src.storage_prototype import storage_prototype
+from src.models.storage_row_turn_model import storage_row_turn_model
+from src.models.storage_model import storage_model
+from src.models.range_model import range_model as unit_model
+
+from src.models.nomenclature_model import nomenclature_model
 
 app.config['JSON_AS_ASCII'] = False
 
@@ -267,6 +275,48 @@ def dto(model_type, dto_model, convert_type="json"):
 
     except Exception as ex:
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
+
+@app.route("/api/storage/turns", methods = ["GET"] )
+def get_turns():
+    args = request.args
+    if "start_period" not in args.keys():
+        return error_proxy.create_error_response(app, "Необходимо передать параметры: start_period, stop_period!")
+        
+    if "stop_period" not in args.keys():
+        return error_proxy.create_error_response(app, "Необходимо передать параметры: start_period, stop_period!")
+    
+    start_date = datetime.strptime(args["start_period"], "%Y-%m-%d")
+    stop_date = datetime.strptime(args["stop_period"], "%Y-%m-%d")
+          
+    block_period = "2021-02-01"
+     
+    source_data = start.get_storage().get_data()[ "storage_row_model"  ]   
+    prototype = storage_prototype(  source_data )  
+    filter = prototype.filter_by_period( start_date, stop_date)
+   
+    key_turn = process_factory.turn_key()
+    processing = process_factory().create( key_turn  )
+
+    # Обороты
+    calculated_turns =  processing().process( source_data )
+    data = processing().process( calculated_turns )
+
+    out = ''
+
+    manager.current_settings.report_mode = "json"
+    factory = report_factory(manager.current_settings)
+    out += "["
+    i=0
+    report = factory.create(None, data)
+    for elem in report:
+      corrected_data = common.prepare_json_out(elem)
+      out += json.dumps(corrected_data, ensure_ascii=False, indent=4)
+      if i != len(data) - 1:
+          i += 1
+          out += ","
+    out += "]"
+
+    return out
 
 if __name__ == "__main__":
     # Загрузка начальных данных
