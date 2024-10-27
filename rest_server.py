@@ -299,10 +299,6 @@ def get_turns():
 
     # Обороты
     calculated_turns =  processing().process( source_data )
-    
-    # Сформируем результат
-    aggregate_key = process_factory.aggregate_key()
-    processing = process_factory().create( aggregate_key  )
     data = processing().process( calculated_turns )
 
     out = ''
@@ -311,9 +307,9 @@ def get_turns():
     factory = report_factory(manager.current_settings)
     out += "["
     i=0
-    for elem in data:
-      parsed_data = factory.create(None, {"temp" : elem}).create("temp")
-      corrected_data = common.prepare_json_out(parsed_data)
+    report = factory.create(None, data)
+    for elem in report:
+      corrected_data = common.prepare_json_out(elem)
       out += json.dumps(corrected_data, ensure_ascii=False, indent=4)
       if i != len(data) - 1:
           i += 1
