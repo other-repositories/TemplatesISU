@@ -17,7 +17,7 @@ class settings:
         MD = "markdown"
 
     _mode = ConvertTypes.CSV.value
-    _block_period = datetime.now
+    _block_period : datetime = datetime.strptime("1999-12-12", "%Y-%m-%d") #datetime.now()
     _maps = {}
 
     def __init__(self):
@@ -32,7 +32,6 @@ class settings:
         self._maps[self.ConvertTypes.JSON.value] = json_report
         self._maps[self.ConvertTypes.XML.value] = xml_report
         self._maps[self.ConvertTypes.RTF.value] = rtf_report
-
     @property
     def inn(self):
         return self._inn

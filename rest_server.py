@@ -19,6 +19,7 @@ from src.models.storage_model import storage_model
 from src.models.range_model import range_model as unit_model
 
 from src.models.nomenclature_model import nomenclature_model
+from src.chain.storage_processing import storage_processing
 
 app.config['JSON_AS_ASCII'] = False
 
@@ -287,36 +288,41 @@ def get_turns():
     
     start_date = datetime.strptime(args["start_period"], "%Y-%m-%d")
     stop_date = datetime.strptime(args["stop_period"], "%Y-%m-%d")
-          
-    block_period = "2021-02-01"
-     
-    source_data = start.get_storage().get_data()[ "storage_row_model"  ]   
-    prototype = storage_prototype(  source_data )  
-    filter = prototype.filter_by_period( start_date, stop_date)
-   
-    key_turn = process_factory.turn_key()
-    processing = process_factory().create( key_turn  )
 
-    # Обороты
-    calculated_turns =  processing().process( source_data )
-    data = processing().process( calculated_turns )
+    transactions = start.get_storage().get_data()["storage_row_model"] 
+    data = storage_processing( transactions ).create_turns( start_date, stop_date )   
 
     out = ''
-
     manager.current_settings.report_mode = "json"
     factory = report_factory(manager.current_settings)
     out += "["
     i=0
-    report = factory.create(None, data)
-    for elem in report:
+    print(data)
+    report = factory.create(None, {"storage_row_model": data})
+    for elem in report.create("storage_row_model"):
       corrected_data = common.prepare_json_out(elem)
       out += json.dumps(corrected_data, ensure_ascii=False, indent=4)
       if i != len(data) - 1:
           i += 1
           out += ","
     out += "]"
-
     return out
+
+@app.route("/api/block_period", methods=["GET"])
+def get_block_period():
+    result = [manager.current_settings.block_period.strftime('%Y-%m-%d')]
+    return result
+
+@app.route("/api/set_block_period", methods=["POST"])
+def set_block_period():
+    args = request.args
+    if "period" in args.keys():
+        try:
+            period = datetime.strptime(args["period"], "%Y-%m-%d")
+            manager.current_settings.block_period = period
+        except:
+           return error_proxy.create_error_response(app, "Некорректно перпеданы параметры: period", 400) 
+    return ""
 
 if __name__ == "__main__":
     # Загрузка начальных данных
