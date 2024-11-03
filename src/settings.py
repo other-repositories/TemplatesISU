@@ -5,6 +5,7 @@ from src.csv_report import csv_report
 from src.json_report import json_report
 from src.xml_report import xml_report
 from src.rtf_report import rtf_report
+from datetime import datetime
 
 class settings:
 
@@ -16,6 +17,7 @@ class settings:
         MD = "markdown"
 
     _mode = ConvertTypes.CSV.value
+    _block_period = datetime.now
     _maps = {}
 
     def __init__(self):
@@ -101,3 +103,23 @@ class settings:
 
     def get_convert_types(self):
         return self._maps
+
+    @property
+    def block_period(self):
+        return self._block_period
+
+    @block_period.setter
+    def block_period(self, value):
+        legacy_period = self._block_period
+        
+        if isinstance(value, datetime):
+            self._block_period = value
+            return
+
+        if isinstance(value, str):
+            try:
+               self._block_period = datetime.strptime(value, "%Y-%m-%d")    
+            except Exception as ex:
+                raise argument_exception(f"Невозможно сконвертировать сроку в дату! {ex}")
+        else:
+            raise argument_exception("Некорректно переданы параметры!")
