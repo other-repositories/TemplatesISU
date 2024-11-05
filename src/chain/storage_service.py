@@ -8,7 +8,7 @@ from src.models.receipt_model import receipt_model
 
 from datetime import datetime
 
-class storage_processing(service):
+class storage_service(service):
     
     def __init__(self, data: list) -> None:
         super().__init__(data)
@@ -46,5 +46,4 @@ class storage_processing(service):
         processing = process_factory().create( aggregate_key  )
         return processing().process( calculated_turns )
          
-    
   

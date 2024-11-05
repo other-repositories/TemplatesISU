@@ -14,7 +14,7 @@ from src.storage_prototype import storage_prototype
 from src.models.storage_row_turn_model import storage_row_turn_model
 from src.models.storage_model import storage_model
 from src.models.range_model import range_model as unit_model
-from src.chain.storage_processing import storage_processing
+from src.chain.storage_service import storage_service
 
 import time
 
@@ -30,7 +30,7 @@ def test_check_create_turns():
     stop_date = datetime.strptime("2024-01-10", "%Y-%m-%d")
 
     transactions = start.get_storage().get_data()["storage_row_model"] 
-    data = storage_processing( transactions ).create_turns( start_date, stop_date )   
+    data = storage_service( transactions ).create_turns( start_date, stop_date )   
 
     assert len(data) > 0
   
@@ -60,7 +60,7 @@ def test_performance():
         stop_date = datetime.strptime(stop_date_str, "%Y-%m-%d")
         
         start_time = time.time()
-        data = storage_processing(transactions).create_turns(start_date, stop_date)
+        data = storage_service(transactions).create_turns(start_date, stop_date)
         end_time = time.time()
 
         elapsed_time = end_time - start_time

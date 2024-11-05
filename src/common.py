@@ -32,3 +32,18 @@ class common:
                     data[i] = common.prepare_json_out(data[i])
         
         return data
+    
+    @staticmethod
+    def prepare_array_json(data):
+        out = ''
+        out += "["
+        i=0
+        for elem in report.create("storage_row_model"):
+            corrected_data = common.prepare_json_out(elem)
+            out += json.dumps(corrected_data, ensure_ascii=False, indent=4)
+            if i != len(data) - 1:
+                i += 1
+                out += ","
+        out += "]"
+        return out
+        

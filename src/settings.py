@@ -16,6 +16,7 @@ class settings:
         RTF = "rtf"
         MD = "markdown"
 
+    __file_name = "settings.json"
     _mode = ConvertTypes.CSV.value
     _block_period : datetime = datetime.strptime("1999-12-12", "%Y-%m-%d") #datetime.now()
     _maps = {}
@@ -32,6 +33,8 @@ class settings:
         self._maps[self.ConvertTypes.JSON.value] = json_report
         self._maps[self.ConvertTypes.XML.value] = xml_report
         self._maps[self.ConvertTypes.RTF.value] = rtf_report
+        #self.open()
+
     @property
     def inn(self):
         return self._inn
@@ -122,3 +125,13 @@ class settings:
                 raise argument_exception(f"Невозможно сконвертировать сроку в дату! {ex}")
         else:
             raise argument_exception("Некорректно переданы параметры!")
+        
+        self.save()
+
+    def save(self):
+        with open(self.__file_name,'w') as f:
+            f.write(str(self._block_period))
+
+    def open(self):
+        with open(self.__file_name,'w') as f:
+            self._block_period = int(f.read())        

@@ -19,7 +19,7 @@ from src.models.storage_model import storage_model
 from src.models.range_model import range_model as unit_model
 
 from src.models.nomenclature_model import nomenclature_model
-from src.chain.storage_processing import storage_processing
+from chain.storage_service import storage_service
 
 app.config['JSON_AS_ASCII'] = False
 
@@ -290,23 +290,13 @@ def get_turns():
     stop_date = datetime.strptime(args["stop_period"], "%Y-%m-%d")
 
     transactions = start.get_storage().get_data()["storage_row_model"] 
-    data = storage_processing( transactions ).create_turns( start_date, stop_date )   
+    data = storage_service( transactions ).create_turns( start_date, stop_date )   
 
-    out = ''
-    manager.current_settings.report_mode = "json"
     factory = report_factory(manager.current_settings)
-    out += "["
-    i=0
-    print(data)
+    manager.current_settings.report_mode = "json"
     report = factory.create(None, {"storage_row_model": data})
-    for elem in report.create("storage_row_model"):
-      corrected_data = common.prepare_json_out(elem)
-      out += json.dumps(corrected_data, ensure_ascii=False, indent=4)
-      if i != len(data) - 1:
-          i += 1
-          out += ","
-    out += "]"
-    return out
+
+    return common.prepare_array_json()
 
 @app.route("/api/block_period", methods=["GET"])
 def get_block_period():
