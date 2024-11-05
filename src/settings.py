@@ -6,6 +6,7 @@ from src.json_report import json_report
 from src.xml_report import xml_report
 from src.rtf_report import rtf_report
 from datetime import datetime
+import json
 
 class settings:
 
@@ -129,9 +130,10 @@ class settings:
         self.save()
 
     def save(self):
-        with open(self.__file_name,'w') as f:
-            f.write(str(self._block_period))
+        with open(self.__file_name, 'w') as f:
+            json.dump({"block_period": self._block_period.strftime("%Y-%m-%d")}, f)
 
     def open(self):
-        with open(self.__file_name,'w') as f:
-            self._block_period = int(f.read())        
+        with open(self.__file_name, 'r') as f:
+            data = json.load(f)
+            self._block_period = datetime.strptime(data["block_period"], "%Y-%m-%d")
