@@ -27,33 +27,6 @@ manager = settings_manager()
 start = start_service(manager.current_settings)
 factory = report_factory(manager.current_settings)
 
-def process_report_data(type, format_type):
-    try:
-        manager.current_settings.report_mode = format_type
-        report = factory.create(None, start.get_storage().get_data())
-
-        out = ''
-        data = report.create(type)
-        i = 0
-        if format_type == "json":
-            out += "["
-            for elem in data:
-                parsed_data = json.loads(elem)
-                corrected_data = common.prepare_json_out(parsed_data)
-                out += json.dumps(corrected_data, ensure_ascii=False, indent=4)
-                if i != len(data) - 1:
-                    i += 1
-                    out += ","
-            out += "]"
-        else:
-            out += f'"{data}"'
-
-        return out
-
-    except Exception as ex:
-        return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
-
-
 @app.route("/api/report_types", methods=["GET"])
 def report_types():
     """
@@ -101,7 +74,7 @@ def get_recipes(convert_type):
                 type: object
     """
     try:
-        return process_report_data("recipes", convert_type)
+        return common.process_report_data("recipes", convert_type, manager, factory, start)
     except Exception as ex:
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
@@ -129,7 +102,7 @@ def get_nomenclatures(convert_type):
                 type: object
     """
     try:
-        return process_report_data("nomenclatures", convert_type)
+        return common.process_report_data("nomenclatures", convert_type, manager, factory, start)
     except Exception as ex:
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
@@ -157,7 +130,7 @@ def get_groups(convert_type):
                 type: object
     """
     try:
-        return process_report_data("groups", convert_type)
+        return common.process_report_data("groups", convert_type, manager, factory, start)
     except Exception as ex:
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
@@ -185,7 +158,7 @@ def get_units(convert_type):
                 type: object
     """
     try:
-        return process_report_data("units", convert_type)
+        return common.process_report_data("units", convert_type, manager, factory, start)
     except Exception as ex:
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
