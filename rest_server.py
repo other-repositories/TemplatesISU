@@ -19,13 +19,16 @@ from src.models.storage_model import storage_model
 from src.models.range_model import range_model as unit_model
 
 from src.models.nomenclature_model import nomenclature_model
-from chain.storage_service import storage_service
+from src.chain.storage_service import storage_service
+
+from src.chain.nomenclature_service import nomenclature_service
 
 app.config['JSON_AS_ASCII'] = False
 
 manager = settings_manager()
 start = start_service(manager.current_settings)
 factory = report_factory(manager.current_settings)
+service_nom = None
 
 @app.route("/api/report_types", methods=["GET"])
 def report_types():
@@ -287,9 +290,50 @@ def set_block_period():
            return error_proxy.create_error_response(app, "Некорректно перпеданы параметры: period", 400) 
     return ""
 
+@app.route("/api/set_block_period", methods=["POST"])
+def set_block_period():
+    args = request.args
+    if "period" in args.keys():
+        try:
+            period = datetime.strptime(args["period"], "%Y-%m-%d")
+            manager.current_settings.block_period = period
+        except:
+           return error_proxy.create_error_response(app, "Некорректно перпеданы параметры: period", 400) 
+    return ""
+
+@app.route("/api/insert_nomenclature", methods=["PUT"])
+def insert_nomenclature():
+    body = request.json
+    return service_nom.insert_nomenclature(body)
+
+@app.route("/api/update_nomenclature", methods=["PATCH"])
+def update_nomenclature():
+    body = request.json
+    return service_nom.update_nomenclature(body)
+
+def trigger_delete(json_text):
+    for item in start.get_storage().get_data()["recipes"]:
+        for receipt in item.receipts_list:
+            if(receipt.nomenclature.unique_code in json_text):
+                return False 
+    return True
+                 
+@app.route("/api/delete_nomenclature", methods=["POST"])
+def delete_nomenclature():
+    body = request.json
+    return service_nom.delete_nomenclature(body)
+
+@app.route("/api/get_nomenclature", methods=["GET"])
+def get_nomenclature():
+    body = request.json 
+    return service_nom.get_nomenclature(body)        
+
 if __name__ == "__main__":
     # Загрузка начальных данных
     with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
         start.create(json.load(file))
+
+    service_nom = nomenclature_service(start.get_storage().get_data()["nomenclatures"])
+    service_nom.set_trigger_before_delete(trigger_delete)
 
     app.run(host="0.0.0.0", port=8080, debug=True)
