@@ -19,39 +19,13 @@ from src.models.storage_model import storage_model
 from src.models.range_model import range_model as unit_model
 
 from src.models.nomenclature_model import nomenclature_model
+from chain.storage_service import storage_service
 
 app.config['JSON_AS_ASCII'] = False
 
 manager = settings_manager()
 start = start_service(manager.current_settings)
 factory = report_factory(manager.current_settings)
-
-def process_report_data(type, format_type):
-    try:
-        manager.current_settings.report_mode = format_type
-        report = factory.create(None, start.get_storage().get_data())
-
-        out = ''
-        data = report.create(type)
-        i = 0
-        if format_type == "json":
-            out += "["
-            for elem in data:
-                parsed_data = json.loads(elem)
-                corrected_data = common.prepare_json_out(parsed_data)
-                out += json.dumps(corrected_data, ensure_ascii=False, indent=4)
-                if i != len(data) - 1:
-                    i += 1
-                    out += ","
-            out += "]"
-        else:
-            out += f'"{data}"'
-
-        return out
-
-    except Exception as ex:
-        return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
-
 
 @app.route("/api/report_types", methods=["GET"])
 def report_types():
@@ -100,7 +74,7 @@ def get_recipes(convert_type):
                 type: object
     """
     try:
-        return process_report_data("recipes", convert_type)
+        return common.process_report_data("recipes", convert_type, manager, factory, start)
     except Exception as ex:
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
@@ -128,7 +102,7 @@ def get_nomenclatures(convert_type):
                 type: object
     """
     try:
-        return process_report_data("nomenclatures", convert_type)
+        return common.process_report_data("nomenclatures", convert_type, manager, factory, start)
     except Exception as ex:
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
@@ -156,7 +130,7 @@ def get_groups(convert_type):
                 type: object
     """
     try:
-        return process_report_data("groups", convert_type)
+        return common.process_report_data("groups", convert_type, manager, factory, start)
     except Exception as ex:
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
@@ -184,7 +158,7 @@ def get_units(convert_type):
                 type: object
     """
     try:
-        return process_report_data("units", convert_type)
+        return common.process_report_data("units", convert_type, manager, factory, start)
     except Exception as ex:
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
@@ -287,36 +261,31 @@ def get_turns():
     
     start_date = datetime.strptime(args["start_period"], "%Y-%m-%d")
     stop_date = datetime.strptime(args["stop_period"], "%Y-%m-%d")
-          
-    block_period = "2021-02-01"
-     
-    source_data = start.get_storage().get_data()[ "storage_row_model"  ]   
-    prototype = storage_prototype(  source_data )  
-    filter = prototype.filter_by_period( start_date, stop_date)
-   
-    key_turn = process_factory.turn_key()
-    processing = process_factory().create( key_turn  )
 
-    # Обороты
-    calculated_turns =  processing().process( source_data )
-    data = processing().process( calculated_turns )
+    transactions = start.get_storage().get_data()["storage_row_model"] 
+    data = storage_service( transactions ).create_turns( start_date, stop_date )   
 
-    out = ''
-
-    manager.current_settings.report_mode = "json"
     factory = report_factory(manager.current_settings)
-    out += "["
-    i=0
-    report = factory.create(None, data)
-    for elem in report:
-      corrected_data = common.prepare_json_out(elem)
-      out += json.dumps(corrected_data, ensure_ascii=False, indent=4)
-      if i != len(data) - 1:
-          i += 1
-          out += ","
-    out += "]"
+    manager.current_settings.report_mode = "json"
+    report = factory.create(None, {"storage_row_model": data})
 
-    return out
+    return common.prepare_array_json()
+
+@app.route("/api/block_period", methods=["GET"])
+def get_block_period():
+    result = [manager.current_settings.block_period.strftime('%Y-%m-%d')]
+    return result
+
+@app.route("/api/set_block_period", methods=["POST"])
+def set_block_period():
+    args = request.args
+    if "period" in args.keys():
+        try:
+            period = datetime.strptime(args["period"], "%Y-%m-%d")
+            manager.current_settings.block_period = period
+        except:
+           return error_proxy.create_error_response(app, "Некорректно перпеданы параметры: period", 400) 
+    return ""
 
 if __name__ == "__main__":
     # Загрузка начальных данных
