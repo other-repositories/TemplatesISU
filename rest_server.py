@@ -17,18 +17,21 @@ from src.storage_prototype import storage_prototype
 from src.models.storage_row_turn_model import storage_row_turn_model
 from src.models.storage_model import storage_model
 from src.models.range_model import range_model as unit_model
-
+from src.deserializer_json import json_deserializer
 from src.models.nomenclature_model import nomenclature_model
 from src.chain.storage_service import storage_service
-
+from src.trigger_system import TriggerSystem, TriggerBeforeDelete
 from src.chain.nomenclature_service import nomenclature_service
 
 app.config['JSON_AS_ASCII'] = False
 
+json_deser = json_deserializer()
 manager = settings_manager()
 start = start_service(manager.current_settings)
 factory = report_factory(manager.current_settings)
 service_nom = None
+trigger_system = TriggerSystem()
+
 
 @app.route("/api/report_types", methods=["GET"])
 def report_types():
@@ -304,12 +307,12 @@ def set_block_period():
 @app.route("/api/insert_nomenclature", methods=["PUT"])
 def insert_nomenclature():
     body = request.json
-    return service_nom.insert_nomenclature(body)
+    return service_nom.insert_nomenclature(json_deser.deserialize_model(body))
 
 @app.route("/api/update_nomenclature", methods=["PATCH"])
 def update_nomenclature():
     body = request.json
-    return service_nom.update_nomenclature(body)
+    return service_nom.update_nomenclature(json_deser.deserialize_model(body))
 
 def trigger_delete(json_text):
     for item in start.get_storage().get_data()["recipes"]:
@@ -321,12 +324,13 @@ def trigger_delete(json_text):
 @app.route("/api/delete_nomenclature", methods=["POST"])
 def delete_nomenclature():
     body = request.json
-    return service_nom.delete_nomenclature(body)
+    return service_nom.delete_nomenclature(json_deser.deserialize_model(body))
 
 @app.route("/api/get_nomenclature", methods=["GET"])
 def get_nomenclature():
+    
     body = request.json 
-    return service_nom.get_nomenclature(body)        
+    return service_nom.get_nomenclature(json_deser.deserialize_model(body))        
 
 if __name__ == "__main__":
     # Загрузка начальных данных
@@ -334,6 +338,7 @@ if __name__ == "__main__":
         start.create(json.load(file))
 
     service_nom = nomenclature_service(start.get_storage().get_data()["nomenclatures"])
-    service_nom.set_trigger_before_delete(trigger_delete)
+    trigger_before = TriggerBeforeDelete(start)
+    trigger_system.attach(trigger_before)
 
     app.run(host="0.0.0.0", port=8080, debug=True)
