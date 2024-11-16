@@ -1,1 +1,4 @@
-{"block_period": "1999-12-12"}
+{
+    "block_period": "1999-12-12",
+    "is_first_start": false
+}

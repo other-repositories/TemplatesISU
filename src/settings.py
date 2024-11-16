@@ -20,6 +20,7 @@ class settings:
     __file_name = "settings.json"
     _mode = ConvertTypes.CSV.value
     _block_period : datetime = datetime.strptime("1999-12-12", "%Y-%m-%d") #datetime.now()
+    _is_first_start = False
     _maps = {}
 
     def __init__(self):
@@ -129,11 +130,15 @@ class settings:
         
         self.save()
 
+    def init_storage(self):
+        self._is_first_start = True
+
     def save(self):
         with open(self.__file_name, 'w') as f:
-            json.dump({"block_period": self._block_period.strftime("%Y-%m-%d")}, f)
+            json.dump({"block_period": self._block_period.strftime("%Y-%m-%d"),"is_first_start":self._is_first_start}, f)
 
     def open(self):
         with open(self.__file_name, 'r') as f:
             data = json.load(f)
             self._block_period = datetime.strptime(data["block_period"], "%Y-%m-%d")
+            self._is_first_start = data["is_first_start"]
