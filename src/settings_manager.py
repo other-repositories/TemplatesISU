@@ -15,12 +15,24 @@ class settings_manager(abstract_logic):
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(settings_manager, cls).__new__(cls)
-        return cls.instance 
-     
+        return cls.instance     
+
+    def __del__(self):
+        self.save()
 
     def __init__(self) -> None:
         if self.__settings is None:
             self.__settings = self.__default_setting() 
+        self.open()
+
+    def save(self):
+        with open(self.__file_name, 'w') as f:
+            json.dump(self.__settings.get_var_settings(), f)
+
+    def open(self):
+        with open(self.__file_name, 'r') as f:
+            data = json.load(f)
+            self.__settings.get_var_settings(data)
 
     """
     Открыть, конвертировать и загрузить настройки,

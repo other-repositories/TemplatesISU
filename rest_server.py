@@ -9,6 +9,7 @@ from src.errors.error_utils import error_proxy
 # Пример вложенной модели
 from src.dto_model import FilterDTO, FilterPrototype, FilterType
 from datetime import datetime
+from src.storage import storage_repository
 app = Flask(__name__)
 Swagger(app)
 
@@ -331,6 +332,27 @@ def get_nomenclature():
     
     body = request.json 
     return service_nom.get_nomenclature(json_deser.deserialize_model(body))        
+
+@app.route("/api/report/<storage_key>", methods = ["GET"])
+def get_report(storage_key: str):
+    if storage_key == "":
+        return error_proxy.create_error_response(app, f"Некорректный передан запрос! Необходимо передать: /api/report/<storage_key>.", 400)
+    
+    try:
+        result = common.process_report_data(storage_key, "json", manager, factory, start) 
+        return result
+    except Exception as ex:
+        return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
+
+@app.route("/api/save_storage", methods=["POST"])
+def save_storage_nomenclature():
+    start.get_storage().save()
+    manager.current_settings.init_storage()
+    manager.current_settings.save()
+
+@app.route("/api/load_storage", methods=["POST"])
+def load_storage_nomenclature():
+    start.get_storage().load()
 
 if __name__ == "__main__":
     # Загрузка начальных данных
