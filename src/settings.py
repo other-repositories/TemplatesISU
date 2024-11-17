@@ -133,12 +133,9 @@ class settings:
     def init_storage(self):
         self._is_first_start = True
 
-    def save(self):
-        with open(self.__file_name, 'w') as f:
-            json.dump({"block_period": self._block_period.strftime("%Y-%m-%d"),"is_first_start":self._is_first_start}, f)
-
-    def open(self):
-        with open(self.__file_name, 'r') as f:
-            data = json.load(f)
+    def get_var_settings(self):
+        return {"block_period": self._block_period.strftime("%Y-%m-%d"),"is_first_start":self._is_first_start}
+    
+    def set_var_settings(self, data):
             self._block_period = datetime.strptime(data["block_period"], "%Y-%m-%d")
-            self._is_first_start = data["is_first_start"]
+            self._is_first_start = data["is_first_start"]       

@@ -17,16 +17,17 @@ from src.models.range_model import range_model as unit_model
 from src.chain.storage_service import storage_service
 import time
 
-def save_data():
+def test_save_data():
     manager = settings_manager()
     manager.current_settings.report_mode = "json"
-    start = start_service( manager.current_settings )
-
+    service = start_service(manager.current_settings)
     with open('docs/receipt1.json', 'r', encoding='utf-8') as file:
-        start.create(json.load(file))
+        service.create(json.load(file))
 
-    code = start.get_storage().get_data()["nomenclatures"][0].unique_code
-    start.get_storage().save()
-    start.get_storage().load()
-    assert code == start.get_storage().get_data()["nomenclatures"][0].unique_code
+    unique_code_before_save = service.get_storage().get_data()["nomenclatures"][0].unique_code
+    service.get_storage().save()
+    service.get_storage().load()
+    unique_code_after_load = service.get_storage().get_data()["nomenclatures"][0].unique_code
+
+    assert unique_code_before_save == unique_code_after_load
                 
