@@ -59,14 +59,3 @@ class CustomLogger:
     @staticmethod
     def critical(message):
         CustomLogger._log_message("CRITICAL", message)
-
-if __name__ == "__main__":
-    # Настраиваем логгер
-    CustomLogger.configure(log_to_console=True, log_to_file=True, log_file="static_logger.log", level="INFO")
-
-    # Логируем сообщения разных уровней
-    CustomLogger.debug("Это отладочное сообщение.")  # Не будет выведено (уровень INFO)
-    CustomLogger.info("Это информационное сообщение.")
-    CustomLogger.warning("Это предупреждение.")
-    CustomLogger.error("Это сообщение об ошибке.")
-    CustomLogger.critical("Это критическое сообщение.")

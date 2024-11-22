@@ -4,6 +4,8 @@ from  src.settings import settings
 import json
 import os
 
+from src.logger import CustomLogger
+
 """
 Менеджер настроек
 """
@@ -26,13 +28,35 @@ class settings_manager(abstract_logic):
         self.open()
 
     def save(self):
-        with open(self.__file_name, 'w') as f:
-            json.dump(self.__settings.get_var_settings(), f)
+        try:
+            CustomLogger.debug(f"Начинаю сохранение настроек в файл: {self.__file_name}")
+            
+            with open(self.__file_name, 'w') as f:
+                data_to_save = self.__settings.get_var_settings()  
+                json.dump(data_to_save, f)
+            
+            CustomLogger.debug(f"Настройки успешно сохранены в файл: {self.__file_name}")
+        except Exception as ex:
+            CustomLogger.error(f"Ошибка при сохранении настроек в файл {self.__file_name}: {ex}")
 
     def open(self):
-        with open(self.__file_name, 'r') as f:
-            data = json.load(f)
-            self.__settings.get_var_settings(data)
+        try:
+            CustomLogger.debug(f"Начинаю открытие настроек из файла: {self.__file_name}")
+            
+            if not os.path.exists(self.__file_name):
+                CustomLogger.warning(f"Файл с настройками не найден: {self.__file_name}")
+                return
+            
+            with open(self.__file_name, 'r') as f:
+                data = json.load(f)
+                self.__settings.set_var_settings(data)  
+                CustomLogger.configure(log_to_console=data["is_write_log_to_console"], 
+                                       log_to_file=data["is_write_log_to_file"], 
+                                       log_file=data["log_file_path"])
+
+            CustomLogger.debug(f"Настройки успешно загружены из файла: {self.__file_name}")
+        except Exception as ex:
+            CustomLogger.error(f"Ошибка при открытии настроек из файла {self.__file_name}: {ex}")
 
     """
     Открыть, конвертировать и загрузить настройки,

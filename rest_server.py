@@ -31,6 +31,8 @@ start = start_service(manager.current_settings)
 factory = report_factory(manager.current_settings)
 service_nom = None
 
+from src.logger import CustomLogger 
+
 @app.route("/api/report_types", methods=["GET"])
 def report_types():
     """
@@ -48,12 +50,14 @@ def report_types():
       500:
         description: Ошибка при формировании отчета
     """
+    CustomLogger.info(f"Получен запрос на список типов отчетов: {request.url}")
     try:
         formats_list = [format.value for format in manager.current_settings.ConvertTypes]
+        CustomLogger.info(f"Список доступных форматов: {formats_list}")
         return jsonify(formats_list)
     except Exception as ex:
+        CustomLogger.error(f"Ошибка при формировании списка форматов: {ex}")
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
-
 
 @app.route("/api/recipes/<convert_type>", methods=["GET"])
 def get_recipes(convert_type):
@@ -77,9 +81,13 @@ def get_recipes(convert_type):
               items:
                 type: object
     """
+    CustomLogger.info(f"Получен запрос на список рецептов. Формат: {convert_type}, URL: {request.url}")
     try:
-        return common.process_report_data("recipes", convert_type, manager, factory, start)
+        result = common.process_report_data("recipes", convert_type, manager, factory, start)
+        CustomLogger.info("Список рецептов успешно сформирован.")
+        return result
     except Exception as ex:
+        CustomLogger.error(f"Ошибка при формировании списка рецептов: {ex}")
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
 
@@ -105,9 +113,13 @@ def get_nomenclatures(convert_type):
               items:
                 type: object
     """
+    CustomLogger.info(f"Получен запрос на список номенклатур. Формат: {convert_type}, URL: {request.url}")
     try:
-        return common.process_report_data("nomenclatures", convert_type, manager, factory, start)
+        result = common.process_report_data("nomenclatures", convert_type, manager, factory, start)
+        CustomLogger.info("Список номенклатур успешно сформирован.")
+        return result
     except Exception as ex:
+        CustomLogger.error(f"Ошибка при формировании списка номенклатур: {ex}")
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
 
@@ -133,9 +145,13 @@ def get_groups(convert_type):
               items:
                 type: object
     """
+    CustomLogger.info(f"Получен запрос на список групп. Формат: {convert_type}, URL: {request.url}")
     try:
-        return common.process_report_data("groups", convert_type, manager, factory, start)
+        result = common.process_report_data("groups", convert_type, manager, factory, start)
+        CustomLogger.info("Список групп успешно сформирован.")
+        return result
     except Exception as ex:
+        CustomLogger.error(f"Ошибка при формировании списка групп: {ex}")
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
 
 
@@ -161,11 +177,14 @@ def get_units(convert_type):
               items:
                 type: object
     """
+    CustomLogger.info(f"Получен запрос на список единиц измерения. Формат: {convert_type}, URL: {request.url}")
     try:
-        return common.process_report_data("units", convert_type, manager, factory, start)
+        result = common.process_report_data("units", convert_type, manager, factory, start)
+        CustomLogger.info("Список единиц измерения успешно сформирован.")
+        return result
     except Exception as ex:
+        CustomLogger.error(f"Ошибка при формировании списка единиц измерения: {ex}")
         return error_proxy.create_error_response(app, f"Ошибка при формировании отчета {ex}", 500)
-
 
 @app.route("/api/dto/<model_type>/<dto_model>", methods=["GET"])
 @app.route("/api/dto/<model_type>/<dto_model>/<convert_type>", methods=["GET"])
@@ -305,12 +324,28 @@ def set_block_period():
 @app.route("/api/insert_nomenclature", methods=["PUT"])
 def insert_nomenclature():
     body = request.json
-    return service_nom.insert_nomenclature(body)
+    CustomLogger.info(f"Получен запрос на добавление номенклатуры. Тело запроса: {body}")
+    try:
+        result = service_nom.insert_nomenclature(body)
+        CustomLogger.info(f"Номенклатура успешно добавлена: {body}")
+        return result
+    except Exception as ex:
+        CustomLogger.error(f"Ошибка при добавлении номенклатуры: {ex}")
+        return error_proxy.create_error_response(app, f"Ошибка при добавлении номенклатуры {ex}", 500)
+
 
 @app.route("/api/update_nomenclature", methods=["PATCH"])
 def update_nomenclature():
     body = request.json
-    return service_nom.update_nomenclature(body)
+    CustomLogger.info(f"Получен запрос на обновление номенклатуры. Тело запроса: {body}")
+    try:
+        result = service_nom.update_nomenclature(body)
+        CustomLogger.info(f"Номенклатура успешно обновлена: {body}")
+        return result
+    except Exception as ex:
+        CustomLogger.error(f"Ошибка при обновлении номенклатуры: {ex}")
+        return error_proxy.create_error_response(app, f"Ошибка при обновлении номенклатуры {ex}", 500)
+
 
 def trigger_delete(json_text):
     for item in start.get_storage().get_data()["recipes"]:
@@ -322,7 +357,15 @@ def trigger_delete(json_text):
 @app.route("/api/delete_nomenclature", methods=["POST"])
 def delete_nomenclature():
     body = request.json
-    return service_nom.delete_nomenclature(body)
+    CustomLogger.info(f"Получен запрос на удаление номенклатуры. Тело запроса: {body}")
+    try:
+        result = service_nom.delete_nomenclature(body)
+        CustomLogger.info(f"Номенклатура успешно удалена: {body}")
+        return result
+    except Exception as ex:
+        CustomLogger.error(f"Ошибка при удалении номенклатуры: {ex}")
+        return error_proxy.create_error_response(app, f"Ошибка при удалении номенклатуры {ex}", 500)
+
 
 @app.route("/api/get_nomenclature", methods=["GET"])
 def get_nomenclature():
@@ -344,7 +387,6 @@ def get_report(storage_key: str):
 def save_storage_nomenclature():
     start.get_storage().save()
     manager.current_settings.init_storage()
-    manager.current_settings.save()
 
 @app.route("/api/load_storage", methods=["POST"])
 def load_storage_nomenclature():
