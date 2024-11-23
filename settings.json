@@ -1,4 +1,7 @@
 {
     "block_period": "1999-12-12",
-    "is_first_start": false
+    "is_first_start": false,
+    "is_write_log_to_console": true,
+    "is_write_log_to_file": true,
+    "log_file_path": "temp_log.log"
 }
